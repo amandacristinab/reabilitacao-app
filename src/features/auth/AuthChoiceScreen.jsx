@@ -14,7 +14,7 @@ export function AuthChoiceScreen() {
   return (
     <div className={styles.page}>
       <div className={styles.container}>
-        <img src={statusBar} alt="Status bar" className={styles.statusBar} />
+        
         <header className={styles.header} aria-label="Neuroviva">
           <div className={styles.headerSide} aria-hidden="true" />
           <img src={logo} alt="neuroviva" className={styles.logo} />

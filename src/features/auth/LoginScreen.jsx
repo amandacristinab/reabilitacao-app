@@ -31,7 +31,7 @@ export function LoginScreen() {
   return (
     <div className={styles.page}>
       <div className={styles.container}>
-        <img src={statusBar} alt="Status bar" className={styles.statusBar} />
+        
 
         <header className={styles.header} aria-label="Neuroviva">
           <button type="button" className={styles.backButton} aria-label="Voltar" onClick={() => navigate(-1)}>
