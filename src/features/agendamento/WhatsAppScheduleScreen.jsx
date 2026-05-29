@@ -1,9 +1,9 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { ChevronLeft, HelpCircle, Mic } from "lucide-react";
+import React, { useMemo, useState } from "react";
+import { Mic } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import logo from "../../../assets/logo.png";
 import triagemImage from "../../../assets/triagem 1.png";
 import { Button } from "../../shared/ui/Button";
+import { ScreenHeader } from "../../shared/ui/ScreenHeader";
 import { formatBrMobilePhone, toDigits } from "./phoneMask";
 import { loadWhatsAppPhoneDigits, saveWhatsAppPhoneDigits } from "./whatsappPhoneStorage";
 import styles from "./WhatsAppScheduleScreen.module.css";
@@ -12,32 +12,12 @@ export function WhatsAppScheduleScreen() {
   const navigate = useNavigate();
   const [digits, setDigits] = useState(() => loadWhatsAppPhoneDigits());
 
-  useEffect(() => {
-    const loaded = loadWhatsAppPhoneDigits();
-    if (loaded) setDigits(loaded);
-  }, []);
-
   const maskedValue = useMemo(() => formatBrMobilePhone(digits), [digits]);
   const isValid = digits.length === 11;
 
   return (
     <div className={styles.page}>
-      <header className={styles.header} aria-label="Agendamento">
-        <button type="button" className={styles.iconButton} aria-label="Voltar" onClick={() => navigate(-1)}>
-          <ChevronLeft size={22} strokeWidth={3} />
-        </button>
-
-        <img src={logo} alt="neuroviva" className={styles.logo} />
-
-        <button
-          type="button"
-          className={styles.iconButton}
-          aria-label="Ajuda"
-          onClick={() => window.alert("Ajuda em breve")}
-        >
-          <HelpCircle size={20} />
-        </button>
-      </header>
+      <ScreenHeader ariaLabel="Agendamento" />
 
       <main className={styles.main}>
         <div className={styles.illustrationWrap} aria-hidden="true">

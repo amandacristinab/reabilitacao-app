@@ -13,10 +13,6 @@
   width: 100%;
 }
 
-.sidebar {
-  display: none;
-}
-
 .surface {
   min-height: 100dvh;
   background: var(--color-surface);

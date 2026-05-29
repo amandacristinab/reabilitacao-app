@@ -3,7 +3,6 @@ import { CircleHelp } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../../shared/ui/Button";
 import logo from "../../../assets/logo.png";
-import statusBar from "../../../assets/StatusBar.png";
 import character from "../../../assets/donacida2 1.png";
 import limbse from "../../../assets/BottonLimbse.png";
 import styles from "./AuthChoiceScreen.module.css";

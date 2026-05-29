@@ -1,9 +1,8 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { ChevronLeft, HelpCircle } from "lucide-react";
+import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import logo from "../../../assets/logo.png";
 import character from "../../../assets/fernandaMolde 2.png";
 import { Button } from "../../shared/ui/Button";
+import { ScreenHeader } from "../../shared/ui/ScreenHeader";
 import { loadTriageAnswers, saveTriageAnswers } from "./triageStorage";
 import styles from "./TriageQuestionsScreen.module.css";
 
@@ -48,16 +47,11 @@ export function TriageQuestionsScreen() {
   const navigate = useNavigate();
   const totalSteps = QUESTIONS.length;
   const [answers, setAnswers] = useState(() => loadTriageAnswers());
-  const [stepIndex, setStepIndex] = useState(0);
-
-  useEffect(() => {
+  const [stepIndex, setStepIndex] = useState(() => {
     const loaded = loadTriageAnswers();
-    setAnswers(loaded);
-
     const firstMissing = QUESTIONS.findIndex((q) => !loaded?.[q.id]);
-    if (firstMissing === -1) setStepIndex(Math.max(0, totalSteps - 1));
-    else setStepIndex(Math.max(0, firstMissing));
-  }, [totalSteps]);
+    return firstMissing === -1 ? Math.max(0, QUESTIONS.length - 1) : Math.max(0, firstMissing);
+  });
 
   const question = QUESTIONS[stepIndex] ?? null;
   const selected = question ? answers?.[question.id] : "";
@@ -115,22 +109,7 @@ export function TriageQuestionsScreen() {
 
   return (
     <div className={styles.page}>
-      <header className={styles.header} aria-label="Triagem">
-        <button type="button" className={styles.iconButton} aria-label="Voltar" onClick={goBack}>
-          <ChevronLeft size={22} strokeWidth={3} />
-        </button>
-
-        <img src={logo} alt="neuroviva" className={styles.logo} />
-
-        <button
-          type="button"
-          className={styles.iconButton}
-          aria-label="Ajuda"
-          onClick={() => window.alert("Ajuda em breve")}
-        >
-          <HelpCircle size={20} />
-        </button>
-      </header>
+      <ScreenHeader ariaLabel="Triagem" onBack={goBack} />
 
       <main className={styles.main}>
         <section className={styles.card} aria-label="Pergunta">

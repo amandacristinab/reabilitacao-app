@@ -38,7 +38,6 @@ test("renders auth choice screen with Limbse and buttons", () => {
 
   expect(screen.getByRole("button", { name: "CRIAR MINHA CONTA" })).toBeInTheDocument();
   expect(screen.getByRole("button", { name: "ENTRAR" })).toBeInTheDocument();
-  expect(screen.getByRole("img", { name: /Status bar/i })).toBeInTheDocument();
   expect(screen.getByRole("img", { name: /Limbse/i })).toBeInTheDocument();
 });
 

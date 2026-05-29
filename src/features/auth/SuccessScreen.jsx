@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "../../shared/ui/Button";
 import fimCadastro from "../../../assets/fimcadastro.png";
 import logo from "../../../assets/logo.png";
-import statusBar from "../../../assets/StatusBar.png";
 import styles from "./SuccessScreen.module.css";
 
 export function SuccessScreen() {

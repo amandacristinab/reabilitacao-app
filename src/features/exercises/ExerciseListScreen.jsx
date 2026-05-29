@@ -1,8 +1,8 @@
 import React from "react";
-import { ChevronDown, ChevronLeft, HelpCircle } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import logo from "../../../assets/logo.png";
 import character from "../../../assets/donacida2 1.png";
+import { ScreenHeader } from "../../shared/ui/ScreenHeader";
 import { findExerciseById } from "./data/exercises";
 import styles from "./ExerciseListScreen.module.css";
 
@@ -12,27 +12,7 @@ export function ExerciseListScreen() {
 
   return (
     <div className={styles.page}>
-      <header className={styles.topBar} aria-label="Cabeçalho de exercícios">
-        <button
-          type="button"
-          className={styles.topActionLeft}
-          onClick={() => navigate(-1)}
-          aria-label="Voltar"
-        >
-          <ChevronLeft size={20} />
-        </button>
-
-        <img src={logo} alt="neuroviva" className={styles.logo} />
-
-        <button
-          type="button"
-          className={styles.topAction}
-          onClick={() => window.alert("Ajuda em breve")}
-          aria-label="Ajuda"
-        >
-          <HelpCircle size={20} />
-        </button>
-      </header>
+      <ScreenHeader ariaLabel="Cabeçalho de exercícios" />
 
       <section className={styles.hero} aria-label="Resumo de exercícios">
         <div className={styles.heroText}>

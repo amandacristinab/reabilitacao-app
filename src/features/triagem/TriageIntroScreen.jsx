@@ -1,8 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft, HelpCircle } from "lucide-react";
 import { Button } from "../../shared/ui/Button";
-import logo from "../../../assets/logo.png";
+import { ScreenHeader } from "../../shared/ui/ScreenHeader";
 import triagemImage from "../../../assets/triagem 1.png";
 import styles from "./TriageIntroScreen.module.css";
 
@@ -11,22 +10,7 @@ export function TriageIntroScreen() {
 
   return (
     <div className={styles.page}>
-      <header className={styles.header} aria-label="Triagem">
-        <button type="button" className={styles.iconButton} aria-label="Voltar" onClick={() => navigate(-1)}>
-          <ChevronLeft size={22} strokeWidth={3} />
-        </button>
-
-        <img src={logo} alt="neuroviva" className={styles.logo} />
-
-        <button
-          type="button"
-          className={styles.iconButton}
-          aria-label="Ajuda"
-          onClick={() => window.alert("Ajuda em breve")}
-        >
-          <HelpCircle size={20} />
-        </button>
-      </header>
+      <ScreenHeader ariaLabel="Triagem" />
 
       <main className={styles.main}>
         <div className={styles.illustrationWrap} aria-hidden="true">

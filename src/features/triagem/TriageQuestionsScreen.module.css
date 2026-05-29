@@ -6,41 +6,6 @@
   position: relative;
 }
 
-.header {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  margin-bottom: 14px;
-}
-
-.logo {
-  width: clamp(110px, 28vw, 138px);
-  height: auto;
-  object-fit: contain;
-  display: block;
-  margin: 0 auto;
-}
-
-.iconButton {
-  width: clamp(36px, 9vw, 42px);
-  height: clamp(36px, 9vw, 42px);
-  border-radius: 999px;
-  border: 2px solid rgba(148, 163, 184, 0.45);
-  background: transparent;
-  color: rgba(30, 41, 59, 0.75);
-  display: inline-grid;
-  place-items: center;
-  cursor: pointer;
-}
-
-.iconButton:first-child {
-  justify-self: start;
-}
-
-.iconButton:last-child {
-  justify-self: end;
-}
-
 .main {
   display: grid;
   justify-items: center;

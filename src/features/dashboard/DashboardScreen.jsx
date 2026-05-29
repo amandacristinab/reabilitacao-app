@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { Dumbbell, HelpCircle, LogOut, Sparkles, Stethoscope } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useSession } from "../../app/state/session";
-import { useActivity } from "../../app/state/activity";
+import { useExerciseHistory } from "../../shared/hooks/useExerciseHistory";
 import logo from "../../../assets/logo.png";
 import character from "../../../assets/donacida2 1.png";
 import styles from "./DashboardScreen.module.css";
@@ -20,7 +20,7 @@ function localDateKey(date) {
 export function DashboardScreen() {
   const navigate = useNavigate();
   const { userName, logout } = useSession();
-  const { activities } = useActivity();
+  const exerciseHistory = useExerciseHistory();
 
   const { weekDays, practicedCount, recentActivities, lastActivityWhen } = useMemo(() => {
     const now = new Date();
@@ -32,8 +32,7 @@ export function DashboardScreen() {
     });
 
     const activityKeys = new Set(
-      (activities ?? [])
-        .filter((a) => a?.type === "exercise")
+      exerciseHistory
         .map((a) => {
           const dt = new Date(a.completedAt);
           if (Number.isNaN(dt.getTime())) return null;
@@ -50,12 +49,7 @@ export function DashboardScreen() {
     });
 
     const practicedCount = weekDays.reduce((acc, d) => acc + (d.isDone ? 1 : 0), 0);
-
-    const recentActivities = (activities ?? [])
-      .filter((a) => a?.type === "exercise")
-      .slice()
-      .sort((a, b) => (Date.parse(b?.completedAt ?? 0) || 0) - (Date.parse(a?.completedAt ?? 0) || 0))
-      .slice(0, 10);
+    const recentActivities = exerciseHistory.slice(0, 10);
 
     const last = recentActivities[0];
     const dt = last ? new Date(last.completedAt) : null;
@@ -65,7 +59,7 @@ export function DashboardScreen() {
         : "";
 
     return { weekDays, practicedCount, recentActivities, lastActivityWhen };
-  }, [activities]);
+  }, [exerciseHistory]);
 
   return (
     <div className={styles.page}>

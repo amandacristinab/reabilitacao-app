@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "../../shared/ui/Button";
 import { useSession } from "../../app/state/session";
 import logo from "../../../assets/logo.png";
-import statusBar from "../../../assets/StatusBar.png";
 import styles from "./RegisterDetailsScreen.module.css";
 
 export function RegisterDetailsScreen() {

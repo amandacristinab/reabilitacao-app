@@ -4,7 +4,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useUserMedia } from "../../shared/hooks/useUserMedia";
 import { findExerciseById } from "./data/exercises";
 import { useActivity } from "../../app/state/activity";
-import triagemImage from "../../../assets/Triagem.png";
 import { getPoseLandmarker } from "./pose/poseLandmarker";
 import { evaluateTowelSlidePose } from "./pose/towelSlideRules";
 import { evaluateArmInFramePose } from "./pose/armInFrameRules";
@@ -134,19 +133,20 @@ export function ExercisePlayerScreen() {
   const poseEnabled = camOn;
   const poseMode = exercise?.id === "towel-slide" ? "towel-slide" : "arm-in-frame";
   const adjustmentsDisabled = isRunning || seriesDone > 0;
-  const showGuide = exercise?.id !== "towel-slide";
 
-  useEffect(() => {
+  function resetPoseState() {
     poseStateRef.current = null;
     poseLastDetectRef.current = 0;
     setPoseFeedback({ state: "idle", reason: "" });
-  }, [exerciseId]);
+  }
+
+  useEffect(() => {
+    resetPoseState();
+  }, [exerciseId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!poseEnabled) {
-      poseStateRef.current = null;
-      poseLastDetectRef.current = 0;
-      setPoseFeedback({ state: "idle", reason: "" });
+      resetPoseState();
       return undefined;
     }
 
@@ -273,11 +273,6 @@ export function ExercisePlayerScreen() {
           ) : null}
         </div>
 
-        {showGuide ? (
-          <div className={styles.guidePane} aria-label="Guia de triagem">
-            <img src={triagemImage} alt="" className={styles.guideImage} />
-          </div>
-        ) : null}
       </div>
 
       <section className={styles.metrics} aria-label="Repetições, tempo e séries">

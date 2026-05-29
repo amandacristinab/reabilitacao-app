@@ -1,10 +1,9 @@
 import React, { useMemo, useState } from "react";
-import { ChevronLeft, CircleHelp, Eye, EyeOff, Mic } from "lucide-react";
+import { ChevronLeft, CircleHelp, Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../../shared/ui/Button";
 import { useSession } from "../../app/state/session";
 import logo from "../../../assets/logo.png";
-import statusBar from "../../../assets/StatusBar.png";
 import styles from "./LoginScreen.module.css";
 
 export function LoginScreen() {
@@ -13,7 +12,6 @@ export function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [keepConnected, setKeepConnected] = useState(false);
 
   const isFormValid = useMemo(() => email.trim() !== "" && password.trim() !== "", [email, password]);
 
@@ -24,14 +22,9 @@ export function LoginScreen() {
     navigate("/app/dashboard");
   };
 
-  const handleMicClick = () => {
-    // Placeholder for voice input.
-  };
-
   return (
     <div className={styles.page}>
       <div className={styles.container}>
-        
 
         <header className={styles.header} aria-label="Neuroviva">
           <button type="button" className={styles.backButton} aria-label="Voltar" onClick={() => navigate(-1)}>
@@ -60,9 +53,6 @@ export function LoginScreen() {
                   onChange={(e) => setEmail(e.target.value)}
                   autoComplete="email"
                 />
-                <button type="button" className={styles.iconButton} aria-label="Microfone" onClick={handleMicClick}>
-                  <Mic size={18} strokeWidth={2.4} />
-                </button>
               </div>
             </div>
 
@@ -91,15 +81,6 @@ export function LoginScreen() {
                 </button>
               </div>
             </div>
-
-            <label className={styles.keepConnected}>
-              <input
-                type="checkbox"
-                checked={keepConnected}
-                onChange={(e) => setKeepConnected(e.target.checked)}
-              />
-              <span>Manter conectado</span>
-            </label>
 
             <Button disabled={!isFormValid} onClick={handleLogin} className={styles.submit}>
               ENTRAR

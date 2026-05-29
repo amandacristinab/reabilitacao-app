@@ -1,8 +1,7 @@
 import React, { useMemo, useState } from "react";
-import { ChevronLeft, HelpCircle } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
-import logo from "../../../assets/logo.png";
 import towelSlideImage from "../../../assets/deslizamento_bia.gif";
+import { ScreenHeader } from "../../shared/ui/ScreenHeader";
 import { findExerciseById } from "./data/exercises";
 import styles from "./ExerciseIntroScreen.module.css";
 
@@ -29,28 +28,7 @@ export function ExerciseIntroScreen() {
   if (!exercise) {
     return (
       <div className={styles.page}>
-        <header className={styles.topBar} aria-label="Cabeçalho do exercício">
-          <button
-            type="button"
-            className={styles.topActionLeft}
-            onClick={() => navigate(-1)}
-            aria-label="Voltar"
-          >
-            <ChevronLeft size={20} />
-          </button>
-
-          <img src={logo} alt="neuroviva" className={styles.logo} />
-
-          <button
-            type="button"
-            className={styles.topAction}
-            aria-label="Ajuda"
-            onClick={() => window.alert("Ajuda em breve")}
-          >
-            <HelpCircle size={20} />
-          </button>
-        </header>
-
+        <ScreenHeader ariaLabel="Cabeçalho do exercício" />
         <main className={styles.main}>
           <h1 className={styles.title}>Exercício</h1>
           <p className={styles.subtitle}>Exercício não encontrado.</p>
@@ -65,28 +43,7 @@ export function ExerciseIntroScreen() {
 
   return (
     <div className={styles.page}>
-      <header className={styles.topBar} aria-label="Cabeçalho do exercício">
-        <button
-          type="button"
-          className={styles.topActionLeft}
-          onClick={() => navigate(-1)}
-          aria-label="Voltar"
-        >
-          <ChevronLeft size={20} />
-        </button>
-
-        <img src={logo} alt="neuroviva" className={styles.logo} />
-
-        <button
-          type="button"
-          className={styles.topAction}
-          aria-label="Ajuda"
-          onClick={() => window.alert("Ajuda em breve")}
-        >
-          <HelpCircle size={20} />
-        </button>
-      </header>
-
+      <ScreenHeader ariaLabel="Cabeçalho do exercício" />
       <main className={styles.main}>
         <h1 className={styles.title}>{exercise.name}</h1>
 

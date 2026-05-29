@@ -1,17 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { BackButton } from "../../shared/ui/BackButton";
-import { useActivity } from "../../app/state/activity";
+import { useExerciseHistory } from "../../shared/hooks/useExerciseHistory";
 import styles from "./ProgressScreen.module.css";
 
 export function ProgressScreen() {
   const navigate = useNavigate();
-  const { activities } = useActivity();
-
-  const entries = (activities ?? [])
-    .filter((a) => a?.type === "exercise")
-    .slice()
-    .sort((a, b) => (Date.parse(b?.completedAt ?? 0) || 0) - (Date.parse(a?.completedAt ?? 0) || 0));
+  const entries = useExerciseHistory();
   return (
     <div className={styles.page}>
       <BackButton onClick={() => navigate(-1)} />
