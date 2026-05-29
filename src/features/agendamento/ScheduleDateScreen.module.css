@@ -1,0 +1,26 @@
+.page {
+  min-height: 100dvh;
+  background: var(--color-surface);
+  color: var(--color-text);
+  display: flex;
+  flex-direction: column;
+  padding: 0 18px 28px;
+}
+
+.body {
+  padding-top: 40px;
+  max-width: 520px;
+}
+
+.title {
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.sub {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 14px;
+}
+

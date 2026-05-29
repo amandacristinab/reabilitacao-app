@@ -1,0 +1,226 @@
+.page {
+  position: relative;
+  padding: calc(clamp(14px, 4dvh, 22px) + env(safe-area-inset-top)) 22px 22px;
+  background: var(--color-surface);
+  padding-bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom));
+}
+
+.topBar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.logo {
+  width: clamp(110px, 28vw, 138px);
+  height: auto;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+}
+
+.topAction {
+  justify-self: end;
+  width: clamp(36px, 9vw, 42px);
+  height: clamp(36px, 9vw, 42px);
+  border-radius: 999px;
+  border: 2px solid rgba(148, 163, 184, 0.45);
+  background: transparent;
+  color: rgba(30, 41, 59, 0.75);
+  display: inline-grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.topActionLeft {
+  justify-self: start;
+  width: clamp(36px, 9vw, 42px);
+  height: clamp(36px, 9vw, 42px);
+  border-radius: 999px;
+  border: 2px solid rgba(148, 163, 184, 0.45);
+  background: transparent;
+  color: rgba(30, 41, 59, 0.75);
+  display: inline-grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.character {
+  width: auto;
+  height: auto;
+  max-width: min(44%, 140px);
+  max-height: clamp(84px, 16dvh, 120px);
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+
+.heroText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 950;
+  margin: 0;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-muted);
+  font-weight: 800;
+}
+
+.subsubtitle {
+  margin: 0;
+  font-size: 12px;
+  color: var(--color-muted);
+}
+
+.disclosure {
+  border: 1px solid var(--color-border);
+  background: var(--color-card);
+  border-radius: 18px;
+  overflow: clip;
+  margin-bottom: 10px;
+}
+
+.summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 14px;
+  cursor: pointer;
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.summaryLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.summaryTitle {
+  font-size: 13px;
+  font-weight: 950;
+}
+
+.summaryText {
+  font-size: 12px;
+  color: var(--color-muted);
+}
+
+.chev {
+  color: var(--color-muted);
+  transition: transform 160ms ease;
+}
+
+.disclosure[open] .chev {
+  transform: rotate(180deg);
+}
+
+.disclosureBody {
+  padding: 0 14px 14px 14px;
+}
+
+.disclosureP {
+  margin: 0;
+  font-size: 12px;
+  color: rgba(30, 41, 59, 0.82);
+  line-height: 1.35;
+}
+
+.section {
+  margin-top: 12px;
+  background: #0f172a;
+  color: #fff;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  overflow: clip;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sectionTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sectionIcon {
+  width: 28px;
+  height: 28px;
+  border-radius: 10px;
+  background: rgba(45, 212, 191, 0.18);
+  display: grid;
+  place-items: center;
+  color: #99f6e4;
+  font-weight: 900;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 950;
+}
+
+.sectionChev {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.exerciseCard {
+  padding: 16px;
+}
+
+.exerciseName {
+  margin: 0 0 4px 0;
+  font-size: 16px;
+  font-weight: 950;
+}
+
+.exerciseMeta {
+  margin: 0 0 14px 0;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.startButton {
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0)) ,
+    linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  border-radius: 18px;
+  padding: 16px 14px;
+  color: #05201d;
+  font-weight: 950;
+  letter-spacing: 0.4px;
+  box-shadow: 0 10px 25px rgba(45, 212, 191, 0.25);
+}
+
+.startButton:active {
+  transform: translateY(1px);
+}

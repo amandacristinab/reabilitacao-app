@@ -1,0 +1,43 @@
+.page {
+  min-height: 100dvh;
+  background: var(--color-surface);
+  color: var(--color-text);
+  display: flex;
+  justify-content: center;
+}
+
+.shell {
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.sidebar {
+  display: none;
+}
+
+.surface {
+  min-height: 100dvh;
+  background: var(--color-surface);
+  color: var(--color-text);
+  display: flex;
+  flex-direction: column;
+  width: min(420px, 100%);
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.mainInner {
+  flex: 1;
+  min-height: 0;
+}
+
+.mobileNav {
+  display: block;
+}

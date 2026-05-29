@@ -1,0 +1,52 @@
+.base {
+  width: 100%;
+  min-height: var(--touch-target);
+  border-radius: var(--radius-md);
+  font-weight: 900;
+  font-size: 16px;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 18px;
+  transition: transform 120ms ease, filter 120ms ease, background-color 120ms ease;
+  user-select: none;
+}
+
+@media (min-width: 720px) {
+  .base {
+    min-height: 52px;
+    font-size: 17px;
+    padding: 18px 20px;
+  }
+}
+
+.base:active {
+  transform: translateY(1px);
+}
+
+.primary {
+  background: var(--color-primary);
+  color: var(--color-text);
+  border: none;
+}
+
+.primary:hover {
+  filter: brightness(0.98);
+}
+
+.outline {
+  background: transparent;
+  color: var(--color-text);
+  border: 2px solid var(--color-primary);
+}
+
+.disabled {
+  background: #cbd5e1;
+  color: var(--color-muted);
+  border-color: #cbd5e1;
+  cursor: not-allowed;
+  transform: none;
+}

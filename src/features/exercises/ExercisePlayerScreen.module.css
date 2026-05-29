@@ -1,0 +1,301 @@
+.page {
+  min-height: 100dvh;
+  background: #1e293b;
+  display: flex;
+  flex-direction: column;
+}
+
+.topBar {
+  padding: calc(12px + env(safe-area-inset-top)) 16px 12px;
+  display: flex;
+  align-items: center;
+  color: #fff;
+  gap: 12px;
+}
+
+.backInline {
+  width: var(--touch-target);
+  height: var(--touch-target);
+  border-radius: 999px;
+  border: none;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.title {
+  flex: 1;
+  text-align: center;
+  font-weight: 900;
+  font-size: 16px;
+  padding-right: 44px;
+}
+
+.stage {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+}
+
+.cameraPane {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+  background: #000;
+}
+
+.poseOverlay {
+  position: absolute;
+  inset: 10px;
+  border-radius: 16px;
+  border: 3px solid rgba(255, 255, 255, 0.15);
+  pointer-events: none;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 10px;
+}
+
+.poseBadge {
+  background: rgba(15, 23, 42, 0.72);
+  color: #fff;
+  font-weight: 950;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  padding: 8px 10px;
+  border-radius: 999px;
+}
+
+.poseOk {
+  border-color: rgba(34, 197, 94, 0.9);
+}
+
+.poseBad {
+  border-color: rgba(239, 68, 68, 0.9);
+}
+
+.video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transform: scaleX(-1);
+  background: #000;
+}
+
+.placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  padding: 30px;
+  text-align: center;
+}
+
+.hint {
+  opacity: 0.7;
+  margin: 0;
+}
+
+.errorText {
+  font-size: 14px;
+  margin: 0 0 18px 0;
+  opacity: 0.92;
+}
+
+.reload {
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-weight: 900;
+  background: var(--color-primary);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.timer {
+  position: absolute;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.95);
+  padding: 10px 36px;
+  border-radius: 40px;
+  border: 3px solid var(--color-primary);
+  z-index: 10;
+}
+
+.timerText {
+  font-size: 32px;
+  font-weight: 950;
+  color: var(--color-text);
+}
+
+.guidePane {
+  height: clamp(160px, 30vh, 260px);
+  background: #000;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.guideImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+}
+
+.metrics {
+  background: #fff;
+  padding: 18px 16px 14px;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.metricCenter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+}
+
+.metricCircle {
+  width: 70px;
+  height: 70px;
+  border-radius: 999px;
+  border: 3px solid rgba(2, 132, 199, 0.35);
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 7px;
+  gap: 6px;
+}
+
+.metricCircleSuccess {
+  border-color: var(--color-success);
+}
+
+.metricCircleDanger {
+  border-color: var(--color-danger);
+}
+
+.adjustButton {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: #f1f5f9;
+  color: var(--color-text);
+  font-weight: 950;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.adjustButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.metricCircleCenter {
+  width: 92px;
+  height: 92px;
+  border-radius: 999px;
+  border: 3px solid var(--color-primary);
+  background: #fff;
+  color: var(--color-text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.metricValue {
+  font-weight: 950;
+  font-size: 22px;
+  color: var(--color-text);
+  flex: 1;
+  text-align: center;
+}
+
+.metricCenterText {
+  font-weight: 950;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+}
+
+.metricTime {
+  font-size: 14px;
+  font-weight: 900;
+  color: #0f172a;
+  opacity: 0.8;
+}
+
+.metricLabel {
+  font-size: 11px;
+  color: #334155;
+  opacity: 0.9;
+  line-height: 1.1;
+}
+
+.metricSub {
+  font-size: 11px;
+  color: #334155;
+  opacity: 0.9;
+  line-height: 1.1;
+}
+
+.controls {
+  background: #fff;
+  padding: 10px 16px calc(18px + env(safe-area-inset-bottom));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 999px;
+  border: none;
+  background: #f1f5f9;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.empty {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  gap: 10px;
+  color: #fff;
+  padding: 24px;
+  text-align: center;
+}
