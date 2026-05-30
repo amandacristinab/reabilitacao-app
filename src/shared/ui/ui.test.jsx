@@ -24,7 +24,7 @@ test("BottomNav renders accessible labels without mojibake", () => {
 
   expect(screen.getByRole("navigation", { name: "Navegação principal" })).toBeInTheDocument();
   expect(screen.getByRole("link", { name: /INÍCIO/i })).toBeInTheDocument();
-  expect(screen.getByRole("link", { name: /TREINO/i })).toBeInTheDocument();
+  expect(screen.getByRole("link", { name: /EXERCÍCIOS/i })).toBeInTheDocument();
   expect(screen.getByRole("link", { name: /PROGRESSO/i })).toBeInTheDocument();
   expect(screen.getByRole("link", { name: /PERFIL/i })).toBeInTheDocument();
 });

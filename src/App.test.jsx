@@ -84,21 +84,20 @@ test("auth choice buttons navigate to register and login", async () => {
 test("dashboard uses default patient data and opens the prescribed exercise list", async () => {
   renderApp(["/app/dashboard"]);
 
-  expect(screen.getByText("Oi, DONA CIDA!")).toBeInTheDocument();
-  expect(screen.getByText("PLANO DE CUIDADOS ATIVO")).toBeInTheDocument();
-  expect(screen.getByRole("button", { name: /VER EXERC/i })).toBeInTheDocument();
+  expect(screen.getByText("Oi, Cida!")).toBeInTheDocument();
+  expect(screen.queryByText("PLANO DE CUIDADOS ATIVO")).not.toBeInTheDocument();
   expect(screen.getByRole("button", { name: /FAZER UM EXERC/i })).toBeInTheDocument();
+  expect(screen.getByText(/Progresso nessa semana/i)).toBeInTheDocument();
+  expect(screen.getByRole("navigation", { name: /Navega..o principal/i })).toBeInTheDocument();
 
-  await userEvent.click(screen.getByRole("button", { name: /VER EXERC/i }));
-  expect(screen.getByRole("heading", { name: /Exerc.cios/i })).toBeInTheDocument();
-  expect(screen.getByText("Rotina prescrita")).toBeInTheDocument();
-  expect(screen.getByText(/5x\/semana/i)).toBeInTheDocument();
+  await userEvent.click(screen.getByRole("button", { name: /FAZER UM EXERC/i }));
+  expect(screen.getByRole("heading", { name: /Deslizamento de toalha/i })).toBeInTheDocument();
 });
 
 test("dashboard shows triage call to action for a new patient without triage", () => {
   renderApp(["/app/dashboard"], { activePatientId: NEW_PATIENT_ID });
 
-  expect(screen.getByText("Oi, NOVO PACIENTE!")).toBeInTheDocument();
+  expect(screen.getByText("Oi, Novo paciente!")).toBeInTheDocument();
   expect(screen.getByText(/AVALIA..O GRATUITA/i)).toBeInTheDocument();
   expect(screen.getAllByRole("button", { name: /INICIAR TRIAGEM/i })).toHaveLength(2);
   expect(screen.queryByText("PLANO DE CUIDADOS ATIVO")).not.toBeInTheDocument();
@@ -147,8 +146,9 @@ test("login with a locally registered user opens the new patient dashboard", asy
 test("login with Dona Cida mock still opens the active care plan", async () => {
   await loginWithEmail("donacida@limbse.com");
 
-  expect(screen.getByText("Oi, DONA CIDA!")).toBeInTheDocument();
-  expect(screen.getByText("PLANO DE CUIDADOS ATIVO")).toBeInTheDocument();
+  expect(screen.getByText("Oi, Cida!")).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: /FAZER UM EXERC/i })).toBeInTheDocument();
+  expect(screen.queryByText("PLANO DE CUIDADOS ATIVO")).not.toBeInTheDocument();
 });
 
 test("unknown login falls back to the new patient instead of Dona Cida", async () => {
@@ -208,8 +208,6 @@ test("completing an exercise saves activity and shows on dashboard", async () =>
 
     view.unmount();
     renderApp(["/app/dashboard"]);
-    expect(screen.getByText(/Hist.rico/i)).toBeInTheDocument();
-    expect(screen.getByText(/Deslizamento de toalha/i)).toBeInTheDocument();
     expect(screen.getByText(/.ltimo exerc.cio:/i)).toBeInTheDocument();
     expect(screen.getByText(/.ltimo exerc.cio:/i)).not.toHaveTextContent("-");
   } finally {
@@ -240,6 +238,8 @@ test("changing target series updates completion flow", async () => {
 
 test("triage flow shows questions and requires selection to continue", async () => {
   renderApp(["/app/triagem"]);
+
+  expect(screen.queryByRole("navigation", { name: /Navega..o principal/i })).not.toBeInTheDocument();
 
   await userEvent.click(screen.getByRole("button", { name: /VAMOS COME/i }));
 

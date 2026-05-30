@@ -12,7 +12,7 @@ const ICONS = {
 
 const LABELS = {
   dashboard: "INÍCIO",
-  exercises: "TREINO",
+  exercises: "EXERCÍCIOS",
   progress: "PROGRESSO",
   profile: "PERFIL",
 };
@@ -32,13 +32,10 @@ export function BottomNav({ items, activeId }) {
             to={item.to}
           >
             <Icon size={24} strokeWidth={isActive ? 2.5 : 2} aria-hidden="true" />
-            <span className={styles.label}>
-              {LABELS[item.id] ?? item.id}
-            </span>
+            <span className={styles.label}>{LABELS[item.id] ?? item.id}</span>
           </NavLink>
         );
       })}
     </nav>
   );
 }
-

@@ -38,7 +38,7 @@ function createId() {
 export function ActivityProvider({ children }) {
   const [activities, setActivities] = useState(loadInitialActivities);
 
-  const addExerciseCompleted = useCallback(({ exerciseId, exerciseName, completedAt, repetitions, series }) => {
+  const addExerciseCompleted = useCallback(({ exerciseId, exerciseName, completedAt, repetitions, series, targetRepetitions, targetSeries }) => {
     const entry = {
       id: createId(),
       type: "exercise",
@@ -47,6 +47,8 @@ export function ActivityProvider({ children }) {
       completedAt: completedAt ?? new Date().toISOString(),
       repetitions: typeof repetitions === "number" ? repetitions : undefined,
       series: typeof series === "number" ? series : undefined,
+      targetRepetitions: typeof targetRepetitions === "number" ? targetRepetitions : undefined,
+      targetSeries: typeof targetSeries === "number" ? targetSeries : undefined,
     };
 
     setActivities((prev) => {

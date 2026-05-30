@@ -2,6 +2,7 @@
   {
     "id": "dona-cida",
     "displayName": "Dona Cida",
+    "shortName": "Cida",
     "fullName": "Aparecida da Silva",
     "email": "donacida@limbse.com",
     "accountType": "patient",
@@ -49,6 +50,7 @@
       "weeklyFrequency": {
         "timesPerWeek": 5,
         "days": ["segunda", "terca", "quarta", "quinta", "sexta"],
+        "scheduledDays": [1, 2, 3, 4, 5],
         "momentsPerDay": 3,
         "moments": ["manha", "tarde", "noite"],
         "progression": "Progressao sem fadiga"
@@ -91,6 +93,36 @@
           }
         ]
       },
+      "activities": [
+        {
+          "exerciseId": "towel-slide",
+          "exerciseName": "Deslizamento de toalha",
+          "completedAt": "2026-05-25T10:00:00",
+          "repetitions": 3,
+          "targetRepetitions": 5
+        },
+        {
+          "exerciseId": "towel-slide",
+          "exerciseName": "Deslizamento de toalha",
+          "completedAt": "2026-05-26T10:00:00",
+          "repetitions": 5,
+          "targetRepetitions": 5
+        },
+        {
+          "exerciseId": "towel-slide",
+          "exerciseName": "Deslizamento de toalha",
+          "completedAt": "2026-05-27T10:00:00",
+          "repetitions": 5,
+          "targetRepetitions": 5
+        },
+        {
+          "exerciseId": "towel-slide",
+          "exerciseName": "Deslizamento de toalha",
+          "completedAt": "2026-05-29T15:35:00",
+          "repetitions": 5,
+          "targetRepetitions": 5
+        }
+      ],
       "safetyTips": [
         {
           "title": "Comece aos poucos",

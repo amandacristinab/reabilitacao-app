@@ -1,17 +1,20 @@
 import React, { useMemo } from "react";
-import { ClipboardList, Dumbbell, HelpCircle, LogOut, Sparkles, Stethoscope } from "lucide-react";
+import { ClipboardList, Clock3, Dumbbell, HelpCircle, LogOut, ShieldCheck, Sparkles, Stethoscope } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useSession } from "../../app/state/session";
 import { getDefaultPatient, getPatientById } from "../../shared/data/mockData";
 import { useExerciseHistory } from "../../shared/hooks/useExerciseHistory";
+import { useSeedMockActivities } from "../../shared/hooks/useSeedMockActivities";
 import { loadWhatsAppPhoneDigits } from "../agendamento/whatsappPhoneStorage";
 import { loadTriageAnswers } from "../triagem/triageStorage";
 import logo from "../../../assets/logo.png";
-import character from "../../../assets/donacida2 1.png";
+import character from "../../../assets/fernanda.png";
 import styles from "./DashboardScreen.module.css";
 
 const DAY_LABELS = ["D", "S", "T", "Q", "Q", "S", "S"];
-const DONE_COLORS = ["#f43f5e", "#f59e0b", "#3b82f6", "#22c55e", "#14b8a6", "#a855f7", "#0ea5e9"];
+const COLOR_MISSED = "#f43f5e";
+const COLOR_PARTIAL = "#f59e0b";
+const COLOR_DONE = "#3b82f6";
 
 const JOURNEY = {
   NO_TRIAGE: "no_triage",
@@ -40,32 +43,36 @@ function getDashboardJourney(patient) {
   return JOURNEY.NO_TRIAGE;
 }
 
+function formatDate(dateLike) {
+  const dt = new Date(`${dateLike}T00:00:00`);
+  if (Number.isNaN(dt.getTime())) return "";
+  return new Intl.DateTimeFormat("pt-BR").format(dt);
+}
+
 export function DashboardScreen() {
   const navigate = useNavigate();
   const { activePatientId, userName, logout } = useSession();
   const exerciseHistory = useExerciseHistory();
   const patient = getPatientById(activePatientId) ?? getDefaultPatient();
   const carePlan = patient?.carePlan ?? null;
+  useSeedMockActivities(patient);
   const journey = getDashboardJourney(patient);
   const hasCarePlan = journey === JOURNEY.CARE_PLAN_ACTIVE;
   const isAssessmentInProgress = journey === JOURNEY.ASSESSMENT_IN_PROGRESS;
-  const displayName = userName || patient?.displayName?.toUpperCase() || "UTILIZADOR";
+  const displayName = patient?.shortName || userName || patient?.displayName || "Utilizador";
   const showProgress = hasCarePlan || exerciseHistory.length > 0;
 
   const dashboardCopy = useMemo(() => {
     if (hasCarePlan) {
+      const firstExerciseId =
+        carePlan?.prescribedRoutine?.morning?.[0]?.exerciseId ??
+        carePlan?.prescribedRoutine?.afternoon?.[0]?.exerciseId ??
+        "towel-slide";
       return {
         prompt: "Vamos praticar?",
-        cardTitle: "PLANO DE CUIDADOS ATIVO",
-        firstItem: carePlan?.professional?.name ?? "Profissional responsável pelo plano",
-        secondItem: patient?.hasOrthosis ? "Órtese personalizada entregue" : "Plano individual liberado",
-        footer: carePlan?.objective ?? "Rotina personalizada liberada",
-        cardButton: "VER EXERCÍCIOS",
-        cardAria: "Ver exercícios",
         primaryButton: "FAZER UM EXERCÍCIO",
         primaryAria: "Fazer um exercício",
-        cardTarget: "/app/exercises",
-        primaryTarget: "/app/exercises",
+        primaryTarget: `/app/exercises/${firstExerciseId}/intro`,
         primaryIcon: <Dumbbell size={28} />,
       };
     }
@@ -101,32 +108,45 @@ export function DashboardScreen() {
       primaryTarget: "/app/triagem",
       primaryIcon: <ClipboardList size={28} />,
     };
-  }, [carePlan, hasCarePlan, isAssessmentInProgress, patient?.hasOrthosis]);
+  }, [hasCarePlan, isAssessmentInProgress]);
 
   const { weekDays, practicedCount, recentActivities, lastActivityWhen } = useMemo(() => {
     const now = new Date();
+    now.setHours(0, 0, 0, 0);
     const days = Array.from({ length: 7 }, (_, idx) => {
       const d = new Date(now);
       d.setDate(now.getDate() - (6 - idx));
-      d.setHours(0, 0, 0, 0);
       return d;
     });
 
-    const activityKeys = new Set(
-      exerciseHistory
-        .map((a) => {
-          const dt = new Date(a.completedAt);
-          if (Number.isNaN(dt.getTime())) return null;
-          return localDateKey(dt);
-        })
-        .filter(Boolean),
-    );
+    const scheduledDays = carePlan?.weeklyFrequency?.scheduledDays ?? [];
 
-    const weekDays = days.map((d, idx) => {
+    const activitiesByDate = {};
+    for (const a of exerciseHistory) {
+      const dt = new Date(a.completedAt);
+      if (Number.isNaN(dt.getTime())) continue;
+      const key = localDateKey(dt);
+      if (!activitiesByDate[key]) activitiesByDate[key] = [];
+      activitiesByDate[key].push(a);
+    }
+
+    const weekDays = days.map((d) => {
       const key = localDateKey(d);
-      const isDone = activityKeys.has(key);
       const dayLabel = DAY_LABELS[d.getDay()] ?? ".";
-      return { key, dayLabel, isDone, doneColor: DONE_COLORS[idx] ?? "#22c55e" };
+      const isPast = d < now;
+      const isScheduled = scheduledDays.includes(d.getDay());
+      const dayActivities = activitiesByDate[key] ?? [];
+      const hasDone = dayActivities.length > 0;
+      const metTarget = hasDone && dayActivities.some(
+        (a) => typeof a.targetRepetitions === "number" ? a.repetitions >= a.targetRepetitions : true
+      );
+
+      let doneColor = null;
+      if (hasDone && metTarget) doneColor = COLOR_DONE;
+      else if (hasDone && !metTarget) doneColor = COLOR_PARTIAL;
+      else if (isPast && isScheduled && !hasDone) doneColor = COLOR_MISSED;
+
+      return { key, dayLabel, isDone: doneColor !== null, doneColor };
     });
 
     const practicedCount = weekDays.reduce((acc, d) => acc + (d.isDone ? 1 : 0), 0);
@@ -134,13 +154,23 @@ export function DashboardScreen() {
 
     const last = recentActivities[0];
     const dt = last ? new Date(last.completedAt) : null;
-    const lastActivityWhen =
-      dt && !Number.isNaN(dt.getTime())
-        ? new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(dt)
-        : "";
+    let lastActivityWhen = "";
+    if (dt && !Number.isNaN(dt.getTime())) {
+      const today = new Date();
+      const isToday =
+        dt.getFullYear() === today.getFullYear() &&
+        dt.getMonth() === today.getMonth() &&
+        dt.getDate() === today.getDate();
+      const time = dt.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+      lastActivityWhen = isToday
+        ? `Hoje às ${time} h`
+        : new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(dt);
+    }
 
     return { weekDays, practicedCount, recentActivities, lastActivityWhen };
   }, [exerciseHistory]);
+
+  const orthosisDelivery = carePlan?.lastOrthosis?.deliveryDate ? formatDate(carePlan.lastOrthosis.deliveryDate) : "";
 
   return (
     <div className={styles.page}>
@@ -154,18 +184,18 @@ export function DashboardScreen() {
           }}
           aria-label="Sair"
         >
-          <LogOut size={20} />
+          <LogOut size={24} strokeWidth={2.7} />
         </button>
 
         <img src={logo} alt="neuroviva" className={styles.logo} />
 
         <button
           type="button"
-          className={styles.topAction}
+          className={styles.topHelp}
           onClick={() => window.alert("Ajuda em breve")}
           aria-label="Ajuda"
         >
-          <HelpCircle size={20} />
+          <HelpCircle size={50} strokeWidth={2.7} />
         </button>
       </header>
 
@@ -178,38 +208,40 @@ export function DashboardScreen() {
       </section>
 
       <div className={styles.content}>
-        <section className={styles.assessmentCard} aria-label="Avaliação física">
-          <div className={styles.assessmentHeader}>
-            <h3 className={styles.assessmentTitle}>{dashboardCopy.cardTitle}</h3>
-            <div className={styles.assessmentChevron} aria-hidden="true" />
-          </div>
+        {!hasCarePlan ? (
+          <section className={styles.assessmentCard} aria-label="Avaliação física">
+            <div className={styles.assessmentHeader}>
+              <h3 className={styles.assessmentTitle}>{dashboardCopy.cardTitle}</h3>
+              <div className={styles.assessmentChevron} aria-hidden="true" />
+            </div>
 
-          <ul className={styles.assessmentList} aria-label="Resumo da jornada">
-            <li className={styles.assessmentItem}>
-              <span className={styles.assessmentIcon} aria-hidden="true">
-                <Stethoscope size={18} />
-              </span>
-              <span>{dashboardCopy.firstItem}</span>
-            </li>
-            <li className={styles.assessmentItem}>
-              <span className={styles.assessmentIcon} aria-hidden="true">
-                <Sparkles size={18} />
-              </span>
-              <span>{dashboardCopy.secondItem}</span>
-            </li>
-          </ul>
+            <ul className={styles.assessmentList} aria-label="Resumo da jornada">
+              <li className={styles.assessmentItem}>
+                <span className={styles.assessmentIcon} aria-hidden="true">
+                  <Stethoscope size={18} />
+                </span>
+                <span>{dashboardCopy.firstItem}</span>
+              </li>
+              <li className={styles.assessmentItem}>
+                <span className={styles.assessmentIcon} aria-hidden="true">
+                  <Sparkles size={18} />
+                </span>
+                <span>{dashboardCopy.secondItem}</span>
+              </li>
+            </ul>
 
-          <button
-            type="button"
-            className={styles.assessmentCta}
-            onClick={() => navigate(dashboardCopy.cardTarget)}
-            aria-label={dashboardCopy.cardAria}
-          >
-            {dashboardCopy.cardButton}
-          </button>
+            <button
+              type="button"
+              className={styles.assessmentCta}
+              onClick={() => navigate(dashboardCopy.cardTarget)}
+              aria-label={dashboardCopy.cardAria}
+            >
+              {dashboardCopy.cardButton}
+            </button>
 
-          <p className={styles.assessmentFooter}>{dashboardCopy.footer}</p>
-        </section>
+            <p className={styles.assessmentFooter}>{dashboardCopy.footer}</p>
+          </section>
+        ) : null}
 
         <button
           type="button"
@@ -239,33 +271,30 @@ export function DashboardScreen() {
                 ))}
               </div>
               <p className={styles.weekSub}>Você praticou {practicedCount} de 7 dias</p>
-              <p className={styles.lastLine}>
-                Último exercício: <strong className={styles.lastValue}>{lastActivityWhen || "-"}</strong>
-              </p>
-            </section>
 
-            <section className={styles.card} aria-label="Histórico de atividades">
-              <h3 className={styles.cardTitle}>Histórico</h3>
-
-              {recentActivities.length === 0 ? (
-                <p className={styles.empty}>Você ainda não realizou exercícios.</p>
+              {hasCarePlan ? (
+                <>
+                  <div className={styles.planFacts} aria-label="Resumo do plano ativo">
+                    {patient?.hasOrthosis && orthosisDelivery ? (
+                      <p className={styles.planFact}>
+                        <ShieldCheck size={20} aria-hidden="true" />
+                        <span>Órtese entregue em: <strong>{orthosisDelivery}</strong></span>
+                      </p>
+                    ) : null}
+                    <p className={styles.planFact}>
+                      <Clock3 size={20} aria-hidden="true" />
+                      <span>Último exercício: <strong>{lastActivityWhen || "-"}</strong></span>
+                    </p>
+                  </div>
+                </>
               ) : (
-                <ul className={styles.history}>
-                  {recentActivities.map((a) => {
-                    const dt = new Date(a.completedAt);
-                    const when = Number.isNaN(dt.getTime())
-                      ? ""
-                      : new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(dt);
-                    return (
-                      <li key={a.id} className={styles.historyItem}>
-                        <span className={styles.historyName}>{a.exerciseName}</span>
-                        <span className={styles.historyWhen}>{when}</span>
-                      </li>
-                    );
-                  })}
-                </ul>
+                <p className={styles.lastLine}>
+                  Último exercício: <strong className={styles.lastValue}>{lastActivityWhen || "-"}</strong>
+                </p>
               )}
             </section>
+
+            
           </>
         ) : null}
       </div>
