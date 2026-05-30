@@ -64,18 +64,38 @@ Diretriz:
 - componentes compartilhados devem concentrar padroes;
 - telas devem evitar cores e medidas soltas sempre que possivel.
 
-### DT05 - `localStorage` no MVP
+### DT05 - JSON mockado para dados do sistema
 
 Decisao:
 
-- usar `localStorage` para persistir dados simulados no MVP.
+- usar arquivos JSON em `src/mocks/` para simular dados que futuramente viriam de banco/API.
+
+Justificativa:
+
+- separa dados de referencia das acoes feitas pelo usuario;
+- facilita criar cenarios de teste, como Dona Cida com plano ativo e novo paciente sem avaliacao;
+- aproxima o MVP de uma futura arquitetura com backend;
+- permite que o time valide telas e fluxos com dados consistentes.
+
+Diretriz:
+
+- plano de cuidados deve pertencer a um paciente especifico;
+- o catalogo de exercicios do MVP deve conter apenas o Deslizamento de toalha;
+- duracao, series, repeticoes, frequencia e horarios devem ficar na prescricao individual do paciente;
+- em etapa futura, telas devem ler esses dados por uma camada de service, nao diretamente do JSON.
+
+### DT06 - `localStorage` no MVP
+
+Decisao:
+
+- usar `localStorage` para persistir acoes feitas pelo usuario no MVP.
 
 Justificativa:
 
 - permite validar experiencia sem backend;
 - reduz complexidade inicial;
 - torna o projeto executavel localmente;
-- permite testar historico de exercicios, triagem e configuracoes.
+- permite testar respostas de triagem, agendamento escolhido, historico de exercicios, avaliacao pos-exercicio e configuracoes.
 
 Limite:
 
@@ -84,7 +104,7 @@ Limite:
 - nao sincroniza entre dispositivos;
 - nao substitui banco de dados.
 
-### DT06 - MediaPipe para prototipo de camera/pose
+### DT07 - MediaPipe para prototipo de camera/pose
 
 Decisao:
 
@@ -102,7 +122,7 @@ Limite:
 - regras de movimento precisam de validacao clinica para uso real;
 - o MVP deve comunicar apenas apoio visual, nao avaliacao terapeutica automatica.
 
-### DT07 - Mobile-first
+### DT08 - Mobile-first
 
 Decisao:
 
@@ -114,7 +134,7 @@ Justificativa:
 - pacientes e cuidadores provavelmente usarao celular;
 - a experiencia exige toque confortavel e telas simples.
 
-### DT08 - Documentacao como fonte de verdade
+### DT09 - Documentacao como fonte de verdade
 
 Decisao:
 
@@ -126,6 +146,24 @@ Justificativa:
 - registra escopo e prioridades;
 - reduz dependencia de interpretacoes individuais do Figma;
 - apoia escrita e defesa do TCC.
+
+### DT10 - Escopo de exercicio unico no TCC
+
+Decisao:
+
+- implementar somente o exercicio Deslizamento de toalha no MVP/TCC.
+
+Justificativa:
+
+- reduz escopo e risco clinico;
+- permite melhorar orientacao, camera, feedback e progresso de um fluxo completo;
+- evita prometer uma biblioteca de exercicios sem validacao suficiente.
+
+Diretriz:
+
+- usuario sem avaliacao pode acessar apenas o Deslizamento de toalha como exercicio demonstrativo;
+- paciente com plano ativo pode receber o Deslizamento de toalha com parametros individualizados;
+- outros exercicios devem ficar documentados como evolucao futura.
 
 ## Decisoes Pendentes
 
@@ -167,7 +205,7 @@ Ainda definir:
 
 Ainda definir:
 
-- estrutura dos exercicios prescritos;
+- estrutura para multiplos exercicios prescritos em versoes futuras;
 - frequencia semanal;
 - momentos por dia;
 - progresso esperado;
@@ -191,7 +229,7 @@ Ainda definir:
 Ainda definir:
 
 - quais textos precisam de revisao profissional;
-- quais exercicios sao seguros para o MVP;
+- quais exercicios futuros poderao ser incluidos com seguranca;
 - quais alertas devem aparecer;
 - quais limites a camera/pose deve comunicar.
 
@@ -206,6 +244,7 @@ Para manter o escopo viavel, o MVP nao deve incluir:
 - envio real e automatico de WhatsApp;
 - notificacoes push reais;
 - relatorios clinicos;
+- novos exercicios alem do Deslizamento de toalha;
 - decisao terapeutica automatizada;
 - IA generativa para recomendacao de tratamento;
 - armazenamento definitivo de dados sensiveis;
@@ -231,6 +270,7 @@ Ao adicionar nova funcionalidade:
 - Agendamento incompleto.
 - Uso de `localStorage` para dados que futuramente serao sensiveis.
 - Testes passam, mas alguns geram avisos de ambiente/`act(...)`.
+- Dados mockados ainda nao estao conectados as telas.
 
 ## Diretriz Para o TCC
 

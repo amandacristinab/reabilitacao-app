@@ -29,8 +29,8 @@ O MVP deve validar a navegacao e a experiencia principal do app, sem depender de
 - acesse o app por login/cadastro simulado;
 - realize uma triagem inicial;
 - solicite ou simule um agendamento de teleatendimento;
-- visualize exercicios prescritos;
-- execute um exercicio com apoio da camera;
+- visualize o Deslizamento de toalha quando liberado ou prescrito;
+- execute o Deslizamento de toalha com apoio da camera;
 - registre conclusao de treino;
 - acompanhe progresso basico;
 - consulte informacoes resumidas de perfil/plano.

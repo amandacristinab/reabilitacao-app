@@ -4,6 +4,24 @@
 
 Este documento descreve os requisitos funcionais e nao funcionais do MVP do NeurovIvA App. Ele tambem indica o estado atual da implementacao para ajudar o time a priorizar as proximas etapas.
 
+## Cenarios de Teste do MVP
+
+O MVP deve trabalhar com dois cenarios principais de paciente:
+
+- **Dona Cida / Aparecida da Silva**: paciente com avaliacao realizada, plano de cuidados prescrito individualmente, rotina ativa e ortese entregue.
+- **Novo paciente**: usuario sem avaliacao, sem plano de cuidados e sem ortese, usado para testar onboarding, triagem e agendamento.
+
+Esses cenarios devem ser representados por arquivos JSON mockados, simulando dados que futuramente viriam de uma API ou banco de dados.
+
+## Escopo de Exercicios no TCC
+
+O MVP/TCC implementa somente o exercicio **Deslizamento de toalha**. Esse exercicio tem dois usos:
+
+- fica disponivel como exercicio demonstrativo para usuarios sem avaliacao;
+- pode ser prescrito no plano individual de um paciente avaliado.
+
+Outros exercicios ficam para evolucao futura e nao devem aparecer como parte do escopo implementado no TCC.
+
 Legenda de status:
 
 - **Implementado**: existe no codigo e possui fluxo navegavel.
@@ -23,7 +41,7 @@ Legenda de status:
 | RF06 | Questionario de triagem | Implementado | Fluxo com perguntas e persistencia local. Pode ser refinado para bater exatamente com o roteiro clinico desejado. |
 | RF07 | Agendamento de teleatendimento | Parcial | Tela de WhatsApp existe. Selecao de data, horario e confirmacao ainda precisam ser completadas. |
 | RF08 | Navegacao principal | Implementado | Bottom navigation entre Inicio, Exercicios, Progresso e Perfil. |
-| RF09 | Exercicios e plano de cuidados | Parcial | Lista de exercicios existe, mas plano, periodos do dia e acordeoes precisam amadurecer. |
+| RF09 | Exercicio e plano de cuidados | Parcial | O MVP foca no Deslizamento de toalha. Plano, periodos do dia e acordeoes ainda precisam amadurecer. |
 | RF10 | Detalhamento do exercicio | Implementado | Tela de introducao com midia e informacoes basicas. |
 | RF11 | Execucao com camera | Implementado | Player com camera, temporizador, series, repeticoes e regras iniciais de pose. |
 | RF12 | Conclusao de exercicio | Implementado | Tela de conclusao e registro local de atividade. |
@@ -37,7 +55,7 @@ Legenda de status:
 
 O app deve apresentar uma tela inicial com identidade NeurovIvA e direcionar o usuario para criar conta ou entrar.
 
-Critérios:
+Criterios:
 
 - exibir logotipo;
 - apresentar chamada inicial simples;
@@ -84,6 +102,8 @@ A home deve variar conforme o estado da jornada:
 
 A home nao deve mostrar rotina prescrita como se ela existisse antes da avaliacao/plano.
 
+O plano de cuidados deve ser entendido como uma informacao individual do paciente, prescrita por profissional. No MVP, a Dona Cida representa o caso com plano ativo; o novo paciente representa o caso ainda sem avaliacao.
+
 ### RF06 - Questionario de Triagem
 
 A triagem deve coletar informacoes iniciais sobre o perfil clinico e funcional do paciente. Ela deve apoiar a jornada do app, sem substituir avaliacao profissional.
@@ -126,13 +146,15 @@ Ela deve aparecer nas telas principais e ficar oculta em fluxos focados, como lo
 
 ### RF09 - Exercicios e Plano de Cuidados
 
-A area de exercicios deve apresentar rotina prescrita, objetivo terapeutico, resumo do caso e exercicios por periodo do dia.
+A area de exercicios deve apresentar o Deslizamento de toalha conforme o estado do paciente.
 
-No MVP, os dados podem ser simulados.
+Para paciente sem avaliacao, o Deslizamento de toalha pode aparecer como exercicio geral inicial/demonstrativo, sem rotina prescrita.
+
+Para paciente com plano ativo, como a Dona Cida, duracao, series, repeticoes, frequencia e periodo do dia devem vir do plano individual prescrito, nao do catalogo global de exercicios.
 
 ### RF10 - Detalhamento do Exercicio
 
-Cada exercicio deve ter uma tela de preparacao com:
+O Deslizamento de toalha deve ter uma tela de preparacao com:
 
 - nome;
 - objetivo;
@@ -218,6 +240,7 @@ Ficam fora do MVP imediato:
 - integracao real com WhatsApp;
 - painel profissional;
 - notificacoes reais;
+- novos exercicios alem do Deslizamento de toalha;
 - prescricoes feitas por profissional dentro do sistema;
 - relatorios clinicos;
 - IA com decisao terapeutica;

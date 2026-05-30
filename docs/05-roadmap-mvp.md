@@ -33,7 +33,30 @@ Status:
 
 - em andamento/concluido nesta etapa.
 
-## Fase 2 - Design System no Codigo
+## Fase 2 - Dados Mockados Estruturados
+
+Objetivo:
+
+- separar dados simulados do sistema das acoes feitas pelo usuario durante o uso do MVP.
+
+Entregaveis:
+
+- `src/mocks/patients.json` com Dona Cida e novo paciente;
+- `src/mocks/exercises.json` com catalogo minimo contendo apenas Deslizamento de toalha;
+- `src/mocks/scheduleSlots.json` com datas e horarios simulados;
+- documentacao explicando JSON mockado versus `localStorage`;
+- definicao de que plano de cuidados pertence a um paciente especifico.
+- definicao de que duracao, series, repeticoes e horarios ficam na prescricao individual do paciente.
+
+Criterio de aceite:
+
+- JSONs sao sintaticamente validos;
+- Dona Cida representa paciente com plano ativo e ortese;
+- novo paciente representa usuario sem avaliacao;
+- o MVP nao promete outros exercicios alem do Deslizamento de toalha;
+- docs explicam como esses mocks serao substituidos por API no futuro.
+
+## Fase 3 - Design System no Codigo
 
 Objetivo:
 
@@ -57,7 +80,7 @@ Criterio de aceite:
 - app continua responsivo em largura proxima de 393 px;
 - build e testes passam.
 
-## Fase 3 - Cadastro e Login
+## Fase 4 - Cadastro e Login
 
 Objetivo:
 
@@ -80,7 +103,7 @@ Criterio de aceite:
 - termos precisam estar aceitos;
 - usuario consegue concluir cadastro e chegar na jornada inicial.
 
-## Fase 4 - Home por Estado do Paciente
+## Fase 5 - Home por Estado do Paciente
 
 Objetivo:
 
@@ -103,7 +126,7 @@ Criterio de aceite:
 - cada estado tem uma acao principal clara;
 - navegacao para triagem, agendamento e exercicios funciona.
 
-## Fase 5 - Agendamento
+## Fase 6 - Agendamento
 
 Objetivo:
 
@@ -124,7 +147,7 @@ Criterio de aceite:
 - resumo final mostra dados corretos;
 - home reflete o agendamento ativo.
 
-## Fase 6 - Exercicios e Pos-Exercicio
+## Fase 7 - Exercicios e Pos-Exercicio
 
 Objetivo:
 
@@ -132,7 +155,7 @@ Objetivo:
 
 Entregaveis:
 
-- lista de exercicios por periodo do dia;
+- Deslizamento de toalha por periodo do dia, quando prescrito;
 - acordeoes de rotina, resumo do caso e seguranca;
 - detalhe do exercicio revisado;
 - player com interface alinhada ao design system;
@@ -147,7 +170,11 @@ Criterio de aceite:
 - avaliacao pos-exercicio e salva;
 - progresso consegue ler os dados registrados.
 
-## Fase 7 - Progresso e Perfil
+Observacao:
+
+- novos exercicios ficam fora do MVP/TCC e devem ser planejados apenas em fase posterior.
+
+## Fase 8 - Progresso e Perfil
 
 Objetivo:
 
@@ -170,7 +197,7 @@ Criterio de aceite:
 - mensagens tem tom de apoio;
 - perfil mostra informacoes coerentes com o estado do paciente.
 
-## Fase 8 - Preparacao para Backend
+## Fase 9 - Preparacao para Backend
 
 Objetivo:
 
@@ -195,10 +222,11 @@ Criterio de aceite:
 
 Ordem recomendada para os proximos ciclos:
 
-1. Fase 2: design system no codigo.
-2. Fase 3: cadastro/login.
-3. Fase 4: home por estado.
-4. Fase 5: agendamento.
-5. Fase 6: pos-exercicio.
+1. Fase 2: dados mockados estruturados.
+2. Fase 3: design system no codigo.
+3. Fase 4: cadastro/login.
+4. Fase 5: home por estado.
+5. Fase 6: agendamento.
+6. Fase 7: pos-exercicio.
 
-Essa ordem reduz retrabalho, porque primeiro estabelece padroes visuais e componentes compartilhados.
+Essa ordem reduz retrabalho, porque primeiro organiza os dados de demonstracao e depois estabelece padroes visuais e componentes compartilhados.

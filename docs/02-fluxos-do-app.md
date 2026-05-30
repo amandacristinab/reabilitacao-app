@@ -63,6 +63,13 @@ O app deve considerar os seguintes estados:
 | Plano ativo | Usuario possui rotina prescrita simulada. | Acesso rapido a exercicios, progresso e plano. |
 | Exercicio concluido | Usuario ja completou ao menos um treino. | Historico e progresso semanal. |
 
+Para testes do MVP, os estados devem ser demonstrados com dois pacientes mockados:
+
+- **Dona Cida**: inicia em `care_plan_active`, com plano individual prescrito, ortese e rotina de exercicios.
+- **Novo paciente**: inicia em `no_assessment`, sem triagem concluida, sem agendamento e sem plano.
+
+No TCC, o unico exercicio implementado e o **Deslizamento de toalha**. Outros exercicios devem ficar fora do MVP e aparecer apenas como evolucao futura.
+
 ## Jornada 1 - Acesso
 
 ### Fluxo 1.1 - Splash
@@ -175,15 +182,17 @@ Deve mostrar:
 - progresso semanal;
 - ultimo treino.
 
+No caso da Dona Cida, a home e as telas internas devem usar o plano prescrito para ela. O app nao deve tratar plano de cuidados como dado global igual para todos os pacientes.
+
 ## Jornada 5 - Exercicios
 
 ### Fluxo 5.1 - Lista de Exercicios
 
 1. Usuario acessa aba Exercicios.
-2. App mostra rotina prescrita e objetivo.
-3. Usuario pode abrir resumo do caso.
-4. Usuario pode abrir periodos do dia.
-5. Usuario escolhe exercicio.
+2. Se o usuario nao tiver avaliacao/plano, app mostra apenas o Deslizamento de toalha como exercicio demonstrativo.
+3. Se o usuario tiver plano ativo, app mostra o Deslizamento de toalha conforme a prescricao individual.
+4. Usuario pode abrir resumo do caso e periodos do dia quando houver plano.
+5. Usuario escolhe o Deslizamento de toalha.
 
 ### Fluxo 5.2 - Detalhe do Exercicio
 
@@ -231,7 +240,7 @@ Devem ser planejados apos o MVP:
 
 - autenticacao real;
 - painel profissional;
-- prescricao real de exercicios;
+- novos exercicios prescritos;
 - notificacoes;
 - integracao com WhatsApp;
 - relatorios;

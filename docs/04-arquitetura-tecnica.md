@@ -12,6 +12,7 @@ Este documento descreve a arquitetura atual do NeurovIvA App e seus limites. Ele
 - CSS Modules para estilos por componente/tela.
 - Vitest e Testing Library para testes.
 - MediaPipe Tasks Vision para suporte inicial a analise de pose.
+- JSON mockado para simular dados vindos de banco/API.
 - `localStorage` para persistencia local simulada.
 
 ## Organizacao de Pastas
@@ -38,6 +39,8 @@ src/
     hooks/           Hooks reutilizaveis
     theme/           Tokens e estilos globais
     ui/              Componentes compartilhados
+
+  mocks/             Dados simulados do sistema
 ```
 
 ## Rotas
@@ -82,9 +85,20 @@ Tambem existem armazenamentos locais especificos:
 - numero de WhatsApp;
 - configuracoes de exercicio, como repeticoes e series.
 
-## Persistencia
+## Dados Mockados e Persistencia
 
-No MVP, a persistencia e feita em `localStorage`. Isso permite validar navegacao e experiencia sem backend.
+No MVP, existem dois tipos de dados:
+
+- **Dados do sistema**: simulados por JSON em `src/mocks/`, como pacientes, catalogo minimo de exercicios, planos de cuidado e horarios disponiveis.
+- **Dados gerados pelo usuario**: salvos em `localStorage`, como respostas de triagem, telefone, agendamento escolhido, exercicios concluidos e avaliacao pos-exercicio.
+
+Essa separacao aproxima o MVP de uma arquitetura real. O JSON representa o que futuramente viria de uma API/banco. O `localStorage` representa a persistencia local temporaria das acoes feitas durante o uso do prototipo.
+
+Mocks previstos:
+
+- `src/mocks/patients.json`: cenarios de paciente, incluindo Dona Cida com plano ativo e novo paciente sem avaliacao.
+- `src/mocks/exercises.json`: catalogo minimo do MVP, contendo apenas o Deslizamento de toalha.
+- `src/mocks/scheduleSlots.json`: datas e horarios simulados para teleatendimento.
 
 Limites desta abordagem:
 
@@ -94,16 +108,24 @@ Limites desta abordagem:
 - nao ha controle de acesso;
 - nao deve ser usado como solucao final para dados sensiveis de saude.
 
+Evolucao recomendada:
+
+- criar uma camada de services para ler os mocks;
+- trocar essa camada por chamadas HTTP quando houver backend;
+- evitar que componentes de tela importem diretamente JSONs em etapas futuras.
+
 ## Exercicios, Camera e MediaPipe
 
 A feature de exercicios possui:
 
-- dados simulados em arquivo local;
+- catalogo minimo com Deslizamento de toalha;
 - tela de introducao;
 - player com camera;
 - contador de tempo, series e repeticoes;
 - regras iniciais para verificar se o braco esta no quadro;
 - regra especifica para deslizamento de toalha.
+
+No MVP/TCC, duracao, series, repeticoes e horarios prescritos devem vir do plano individual do paciente em `patients.json`, nao do catalogo global de exercicios. Para usuario sem avaliacao, o Deslizamento de toalha pode ser exibido como exercicio demonstrativo liberado.
 
 O MediaPipe deve ser entendido como apoio tecnico inicial. No contexto do TCC/MVP, ele nao deve ser apresentado como ferramenta clinica validada ou diagnostica.
 

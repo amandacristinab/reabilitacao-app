@@ -1,0 +1,165 @@
+[
+  {
+    "id": "dona-cida",
+    "displayName": "Dona Cida",
+    "fullName": "Aparecida da Silva",
+    "email": "donacida@limbse.com",
+    "accountType": "patient",
+    "gender": "female",
+    "birthDate": "1954-08-05",
+    "journeyStatus": "care_plan_active",
+    "triageCompleted": true,
+    "assessmentCompleted": true,
+    "scheduledAssessment": null,
+    "hasCarePlan": true,
+    "hasOrthosis": true,
+    "carePlan": {
+      "id": "care-plan-dona-cida-2026-02",
+      "status": "active",
+      "prescribedForPatientId": "dona-cida",
+      "professional": {
+        "name": "Fernanda Beatriz",
+        "role": "Fisioterapeuta",
+        "license": "12345-F (Regiao 3)"
+      },
+      "date": "2026-02-05",
+      "objective": "Melhorar o movimento e a forca",
+      "assessment": {
+        "patientName": "Aparecida da Silva",
+        "ageLabel": "71 anos",
+        "strokeType": "isquemico",
+        "side": "esquerdo",
+        "phase": "cronica",
+        "affectedSegment": "mao direita",
+        "rigidityMas": "1+ (leve)",
+        "date": "2026-02-04"
+      },
+      "lastMeasurement": {
+        "location": "UNIFESP - Laboratorio de Orteses & Proteses 3D",
+        "date": "2026-02-09"
+      },
+      "lastOrthosis": {
+        "location": "UNIFESP - Laboratorio de Orteses & Proteses 3D",
+        "productionDate": "2026-02-19",
+        "fittingDate": "2026-02-23",
+        "neededAdjustments": true,
+        "adjustmentCount": 1,
+        "deliveryDate": "2026-02-26"
+      },
+      "weeklyFrequency": {
+        "timesPerWeek": 5,
+        "days": ["segunda", "terca", "quarta", "quinta", "sexta"],
+        "momentsPerDay": 3,
+        "moments": ["manha", "tarde", "noite"],
+        "progression": "Progressao sem fadiga"
+      },
+      "prescribedRoutine": {
+        "morning": [
+          {
+            "exerciseId": "towel-slide",
+            "period": "morning",
+            "periodLabel": "Manha",
+            "durationSeconds": 180,
+            "durationLabel": "2-3 min",
+            "repetitions": 5,
+            "series": 1,
+            "frequency": "segunda a sexta"
+          }
+        ],
+        "afternoon": [
+          {
+            "exerciseId": "towel-slide",
+            "period": "afternoon",
+            "periodLabel": "Tarde",
+            "durationSeconds": 180,
+            "durationLabel": "2-3 min",
+            "repetitions": 5,
+            "series": 1,
+            "frequency": "segunda a sexta"
+          }
+        ],
+        "night": [
+          {
+            "exerciseId": "towel-slide",
+            "period": "night",
+            "periodLabel": "Noite",
+            "durationSeconds": 180,
+            "durationLabel": "2-3 min",
+            "repetitions": 5,
+            "series": 1,
+            "frequency": "segunda a sexta"
+          }
+        ]
+      },
+      "safetyTips": [
+        {
+          "title": "Comece aos poucos",
+          "description": "Faca poucas repeticoes e aumente a cada semana se estiver confortavel."
+        },
+        {
+          "title": "Respeite os seus limites",
+          "description": "O treino e para melhorar, nao para esgotar."
+        },
+        {
+          "title": "Se doer, formigar ou piorar",
+          "description": "Faca mais leve ou pause. Registre no app para avisar o profissional."
+        },
+        {
+          "title": "Priorize a qualidade",
+          "description": "Qualidade e melhor do que velocidade. Faca movimentos lentos e controlados."
+        }
+      ],
+      "orthosisUsePlan": {
+        "whenToUse": [
+          "Apos os exercicios e em momentos de repouso",
+          "Para higiene e cuidados, se ajudar a abrir a mao",
+          "A noite, somente se estiver confortavel e sem marcas na pele"
+        ],
+        "howLongToUse": [
+          {
+            "week": 1,
+            "instruction": "20-30 min 1x/dia"
+          },
+          {
+            "week": 2,
+            "instruction": "30-45 min 1-2x/dia"
+          },
+          {
+            "week": 3,
+            "instruction": "45-60 min 2x/dia, se estiver tudo ok"
+          },
+          {
+            "week": 4,
+            "instruction": "Manter o que for confortavel"
+          }
+        ],
+        "whenToRemoveImmediately": [
+          "Vermelhidao que nao some em 20-30 min",
+          "Dor, formigamento, dormencia ou inchaco",
+          "Mao fria, roxa ou com sensacao de aperto demais",
+          "Aumento claro da rigidez durante o uso"
+        ],
+        "quickCheck": [
+          "Checar a pele, principalmente pontos de pressao",
+          "Velcro firme, sem apertar"
+        ]
+      }
+    }
+  },
+  {
+    "id": "novo-paciente",
+    "displayName": "Novo paciente",
+    "fullName": "",
+    "email": "",
+    "accountType": "patient",
+    "gender": "",
+    "birthDate": "",
+    "journeyStatus": "no_assessment",
+    "triageCompleted": false,
+    "assessmentCompleted": false,
+    "scheduledAssessment": null,
+    "hasCarePlan": false,
+    "hasOrthosis": false,
+    "carePlan": null
+  }
+]

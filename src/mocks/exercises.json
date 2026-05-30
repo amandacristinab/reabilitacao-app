@@ -1,0 +1,22 @@
+[
+  {
+    "id": "towel-slide",
+    "name": "Deslizamento de toalha",
+    "availableWithoutAssessment": true,
+    "availabilityDescription": "Exercicio demonstrativo liberado para usuarios sem avaliacao e tambem prescritivel em planos individuais.",
+    "levelLabel": "Leve",
+    "objective": "Apoiar mobilidade e controle do membro superior.",
+    "requiredItems": ["cadeira", "mesa", "toalha"],
+    "instructions": [
+      "Sente-se com apoio seguro.",
+      "Apoie o antebraco sobre a mesa.",
+      "Coloque a mao sobre uma toalha.",
+      "Deslize a toalha lentamente para frente e para tras, sem forcar."
+    ],
+    "safetyNotes": [
+      "Interrompa se houver dor, formigamento ou piora do desconforto.",
+      "Priorize movimentos lentos e controlados.",
+      "Use apoio de cuidador se precisar de ajuda para posicionamento."
+    ]
+  }
+]
