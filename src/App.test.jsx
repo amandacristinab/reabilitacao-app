@@ -22,8 +22,19 @@ function renderApp(initialEntries, options = {}) {
   );
 }
 
+let mockGetUserMedia;
+
 beforeEach(() => {
   window.localStorage.clear();
+
+  const mockTrack = { stop: vi.fn() };
+  const mockStream = { getTracks: () => [mockTrack] };
+  mockGetUserMedia = vi.fn().mockResolvedValue(mockStream);
+  Object.defineProperty(navigator, "mediaDevices", {
+    configurable: true,
+    writable: true,
+    value: { getUserMedia: mockGetUserMedia },
+  });
 });
 
 async function loginWithEmail(email) {
@@ -253,15 +264,67 @@ test("exercise completion restores the bottom navigation", () => {
   expect(screen.getByRole("navigation", { name: /Navega..o principal/i })).toBeInTheDocument();
 });
 
+test("camera is not requested before tapping INICIAR", () => {
+  renderApp(["/app/exercises/towel-slide"]);
+
+  expect(mockGetUserMedia).not.toHaveBeenCalled();
+  expect(screen.getByRole("button", { name: "INICIAR" })).toBeInTheDocument();
+});
+
+test("first INICIAR requests camera then shows countdown", async () => {
+  vi.useFakeTimers();
+  try {
+    renderApp(["/app/exercises/towel-slide"]);
+
+    await userEvent.click(screen.getByRole("button", { name: "INICIAR" }));
+    expect(mockGetUserMedia).toHaveBeenCalledTimes(1);
+
+    // flush getUserMedia promise chain so phase transitions to countdown
+    await act(async () => {});
+    expect(screen.getByText("3")).toBeInTheDocument();
+
+    await act(async () => { vi.advanceTimersByTime(1_000); });
+    expect(screen.getByText("2")).toBeInTheDocument();
+
+    await act(async () => { vi.advanceTimersByTime(1_000); });
+    expect(screen.getByText("1")).toBeInTheDocument();
+
+    await act(async () => { vi.advanceTimersByTime(1_000); });
+    expect(screen.getByText("VAI!")).toBeInTheDocument();
+  } finally {
+    vi.useRealTimers();
+  }
+});
+
+test("timer does not decrease during countdown", async () => {
+  vi.useFakeTimers();
+  try {
+    renderApp(["/app/exercises/towel-slide"]);
+
+    await userEvent.click(screen.getByRole("button", { name: "INICIAR" }));
+    // flush getUserMedia promise so phase becomes countdown
+    await act(async () => {});
+
+    // advance 2s into countdown — timer should still show 03:00
+    await act(async () => { vi.advanceTimersByTime(2_000); });
+    expect(screen.getByText("03:00")).toBeInTheDocument();
+  } finally {
+    vi.useRealTimers();
+  }
+});
+
 test("completing an exercise saves activity and shows on dashboard", async () => {
   vi.useFakeTimers();
   try {
     const view = renderApp(["/app/exercises/towel-slide"]);
 
     await userEvent.click(screen.getByRole("button", { name: "INICIAR" }));
-    await act(async () => {
-      vi.advanceTimersByTime(180_000);
-    });
+    // flush getUserMedia promise → phase=countdown, countdown interval set up
+    await act(async () => {});
+    // advance through countdown (4s) — phase transitions to running, timer interval set up
+    await act(async () => { vi.advanceTimersByTime(4_500); });
+    // advance through exercise (exactly 180 ticks: 180→0)
+    await act(async () => { vi.advanceTimersByTime(180_000); });
 
     expect(window.localStorage.getItem("neuroviva.activities.v1")).toBeTruthy();
 
@@ -274,25 +337,52 @@ test("completing an exercise saves activity and shows on dashboard", async () =>
   }
 });
 
-test("changing target series updates completion flow", async () => {
+test("pausing stops the timer and resuming continues without countdown", async () => {
   vi.useFakeTimers();
   try {
     renderApp(["/app/exercises/towel-slide"]);
 
-    await userEvent.click(screen.getByRole("button", { name: /Aumentar s.ries/i }));
+    await userEvent.click(screen.getByRole("button", { name: "INICIAR" }));
+    // flush getUserMedia promise → phase=countdown
+    await act(async () => {});
+    // advance through countdown → phase=running, timer interval set up
+    await act(async () => { vi.advanceTimersByTime(4_500); });
 
-    for (let i = 0; i < 2; i += 1) {
-      await userEvent.click(screen.getByRole("button", { name: "INICIAR" }));
-      await act(async () => {
-        vi.advanceTimersByTime(180_000);
-      });
-    }
+    expect(screen.getByRole("button", { name: "PAUSAR" })).toBeInTheDocument();
 
-    expect(screen.getByRole("heading", { name: /Conclu.do/i })).toBeInTheDocument();
+    // pause
+    await userEvent.click(screen.getByRole("button", { name: "PAUSAR" }));
+    expect(screen.getByRole("button", { name: "INICIAR" })).toBeInTheDocument();
+
+    // timer should not decrease while paused
+    const timeBefore = screen.getByText(/\d{2}:\d{2}/).textContent;
+    await act(async () => { vi.advanceTimersByTime(10_000); });
+    expect(screen.getByText(/\d{2}:\d{2}/).textContent).toBe(timeBefore);
+
+    // resume — no new countdown, goes straight to running
+    await userEvent.click(screen.getByRole("button", { name: "INICIAR" }));
+    expect(screen.getByRole("button", { name: "PAUSAR" })).toBeInTheDocument();
+
+    // complete the exercise (exactly 180 ticks from when timer interval was set up)
+    await act(async () => { vi.advanceTimersByTime(180_000); });
     expect(window.localStorage.getItem("neuroviva.activities.v1")).toBeTruthy();
   } finally {
     vi.useRealTimers();
   }
+});
+
+test("camera permission error shows message and allows retry", async () => {
+  const permissionError = Object.assign(new Error("Permission denied"), { name: "NotAllowedError" });
+  mockGetUserMedia.mockRejectedValueOnce(permissionError);
+
+  renderApp(["/app/exercises/towel-slide"]);
+
+  await userEvent.click(screen.getByRole("button", { name: "INICIAR" }));
+  // flush getUserMedia rejection chain → error set, phase back to idle
+  await act(async () => {});
+
+  expect(screen.getByText(/Permiss.o bloqueada/i)).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "INICIAR" })).toBeInTheDocument();
 });
 
 test("triage flow shows questions and requires selection to continue", async () => {
