@@ -24,12 +24,16 @@ beforeEach(() => {
   window.localStorage.clear();
 });
 
-test("renders welcome screen", () => {
+test("renders welcome screen", async () => {
   renderApp(["/"]);
 
   expect(screen.getByRole("img", { name: /neuroviva/i })).toBeInTheDocument();
   expect(screen.getByText(/Sua companheira/i)).toBeInTheDocument();
-  expect(screen.getAllByRole("button", { name: /come/i })).toHaveLength(2);
+  const startButton = screen.getByRole("button", { name: /come/i });
+  expect(screen.getAllByRole("button", { name: /come/i })).toHaveLength(1);
+
+  await userEvent.click(startButton);
+  expect(screen.getByRole("button", { name: "CRIAR MINHA CONTA" })).toBeInTheDocument();
 });
 
 test("renders auth choice screen with Limbse and buttons", () => {

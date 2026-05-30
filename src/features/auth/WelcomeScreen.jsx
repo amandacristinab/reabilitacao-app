@@ -29,16 +29,11 @@ export function WelcomeScreen() {
         </main>
 
         <footer className={styles.footer}>
-          <button type="button" className={styles.startText} onClick={() => navigate("/auth")}>
-            COMEÇAR
-          </button>
-          <button
-            type="button"
-            className={styles.startButton}
-            onClick={() => navigate("/auth")}
-            aria-label="Começar"
-          >
-            <ChevronRight size={22} />
+          <button type="button" className={styles.startAction} onClick={() => navigate("/auth")} aria-label="Começar">
+            <span className={styles.startText}>COMEÇAR</span>
+            <span className={styles.startButton} aria-hidden="true">
+              <ChevronRight size={22} />
+            </span>
           </button>
         </footer>
       </div>
