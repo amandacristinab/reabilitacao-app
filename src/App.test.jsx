@@ -51,9 +51,19 @@ test("auth choice buttons navigate to register and login", async () => {
   renderApp(["/auth"]);
 
   await userEvent.click(screen.getByRole("button", { name: "ENTRAR" }));
-  expect(screen.getByLabelText(/^e-?mail$/i)).toBeInTheDocument();
-  expect(screen.getByLabelText(/^senha$/i)).toBeInTheDocument();
-  expect(screen.getByRole("button", { name: "ENTRAR" })).toBeInTheDocument();
+  const email = screen.getByLabelText(/^e-?mail$/i);
+  const password = screen.getByLabelText(/^senha$/i);
+  const loginButton = screen.getByRole("button", { name: "ENTRAR" });
+
+  expect(email).toBeInTheDocument();
+  expect(password).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Ajuda" })).toBeInTheDocument();
+  expect(screen.getByText("Manter conectado")).toBeInTheDocument();
+  expect(loginButton).toBeDisabled();
+
+  await userEvent.type(email, "donacida@limbse.com");
+  await userEvent.type(password, "123456");
+  expect(loginButton).toBeEnabled();
   expect(screen.getByRole("button", { name: /Clique aqui para criar/i })).toBeInTheDocument();
 });
 

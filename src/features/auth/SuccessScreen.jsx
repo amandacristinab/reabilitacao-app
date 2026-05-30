@@ -1,9 +1,8 @@
 import React from "react";
-import { ChevronLeft, CircleHelp } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { AuthHeader } from "./components/AuthHeader";
 import { Button } from "../../shared/ui/Button";
 import fimCadastro from "../../../assets/fimcadastro.png";
-import logo from "../../../assets/logo.png";
 import styles from "./SuccessScreen.module.css";
 
 export function SuccessScreen() {
@@ -12,16 +11,7 @@ export function SuccessScreen() {
   return (
     <div className={styles.page}>
       <div className={styles.container}>
-
-        <header className={styles.header} aria-label="Neuroviva">
-          <button type="button" className={styles.backButton} aria-label="Voltar" onClick={() => navigate(-1)}>
-            <ChevronLeft size={22} strokeWidth={3} />
-          </button>
-          <img src={logo} alt="neuroviva" className={styles.logo} />
-          <button type="button" className={styles.helpButton} aria-label="Ajuda" disabled>
-            <CircleHelp size={22} />
-          </button>
-        </header>
+        <AuthHeader onBack={() => navigate(-1)} />
 
         <main className={styles.main} aria-label="Sucesso no cadastro">
           <img src={fimCadastro} alt="Tudo pronto" className={styles.check} />
@@ -39,4 +29,3 @@ export function SuccessScreen() {
     </div>
   );
 }
-

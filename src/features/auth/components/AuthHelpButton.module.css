@@ -1,0 +1,18 @@
+.button {
+  justify-self: end;
+  width: var(--auth-header-action);
+  height: var(--auth-header-action);
+  border-radius: 999px;
+  border: 0;
+  background: transparent;
+  color: var(--color-text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.button:disabled {
+  opacity: 1;
+  cursor: default;
+}

@@ -1,10 +1,10 @@
 import React, { useMemo, useState } from "react";
-import { ChevronLeft, CircleHelp } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { AuthField } from "./components/AuthField";
+import { AuthHeader } from "./components/AuthHeader";
 import { Button } from "../../shared/ui/Button";
 import { useSession } from "../../app/state/session";
 import { NEW_PATIENT_ID } from "../../shared/data/mockData";
-import logo from "../../../assets/logo.png";
 import styles from "./RegisterDetailsScreen.module.css";
 
 export function RegisterDetailsScreen() {
@@ -54,17 +54,7 @@ export function RegisterDetailsScreen() {
   return (
     <div className={styles.page}>
       <div className={styles.container}>
-       
-
-        <header className={styles.header} aria-label="Neuroviva">
-          <button type="button" className={styles.backButton} aria-label="Voltar" onClick={() => navigate(-1)}>
-            <ChevronLeft size={22} strokeWidth={3} />
-          </button>
-          <img src={logo} alt="neuroviva" className={styles.logo} />
-          <button type="button" className={styles.helpButton} aria-label="Ajuda" disabled>
-            <CircleHelp size={22} />
-          </button>
-        </header>
+        <AuthHeader onBack={() => navigate(-1)} />
 
         <main className={styles.main} aria-label="Cadastro">
           <header className={styles.screenHeader}>
@@ -73,120 +63,81 @@ export function RegisterDetailsScreen() {
           </header>
 
           <form className={styles.form} onSubmit={handleSubmit}>
-            <div className={styles.field}>
-              <label className={styles.label} htmlFor="nomeCompleto">
-                NOME COMPLETO
-              </label>
-              <div className={styles.inputShell}>
-                <input
-                  id="nomeCompleto"
-                  name="nomeCompleto"
-                  className={styles.input}
-                  placeholder="O seu nome"
-                  value={formData.nomeCompleto}
-                  onChange={handleChange}
-                  autoComplete="name"
-                />
-              </div>
-            </div>
+            <AuthField label="NOME COMPLETO" htmlFor="nomeCompleto">
+              <input
+                id="nomeCompleto"
+                name="nomeCompleto"
+                placeholder="O seu nome"
+                value={formData.nomeCompleto}
+                onChange={handleChange}
+                autoComplete="name"
+              />
+            </AuthField>
 
-            <div className={styles.field}>
-              <label className={styles.label} htmlFor="email">
-                E-MAIL
-              </label>
-              <div className={styles.inputShell}>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  className={styles.input}
-                  placeholder="seu@email.com"
-                  value={formData.email}
-                  onChange={handleChange}
-                  autoComplete="email"
-                />
-              </div>
-            </div>
+            <AuthField label="E-MAIL" htmlFor="email">
+              <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="seu@email.com"
+                value={formData.email}
+                onChange={handleChange}
+                autoComplete="email"
+              />
+            </AuthField>
 
-            <div className={styles.field}>
-              <label className={styles.label} htmlFor="confirmacaoEmail">
-                CONFIRMAÇÃO DE E-MAIL
-              </label>
-              <div className={styles.inputShell}>
+            <div className={styles.fieldGroup}>
+              <AuthField label="CONFIRMAÇÃO DE E-MAIL" htmlFor="confirmacaoEmail">
                 <input
                   id="confirmacaoEmail"
                   name="confirmacaoEmail"
                   type="email"
-                  className={styles.input}
                   placeholder="repita seu@email.com"
                   value={formData.confirmacaoEmail}
                   onChange={handleChange}
                   autoComplete="email"
                 />
-              </div>
+              </AuthField>
               {!emailsMatch ? <div className={styles.error}>Os e-mails não coincidem.</div> : null}
             </div>
 
-            <div className={styles.field}>
-              <label className={styles.label} htmlFor="sexo">
-                SEXO
-              </label>
-              <div className={styles.inputShell}>
-                <select
-                  id="sexo"
-                  name="sexo"
-                  className={styles.selectLikeInput}
-                  value={formData.sexo}
-                  onChange={handleChange}
-                >
-                  <option value="">Selecione...</option>
-                  <option value="feminino">Feminino</option>
-                  <option value="masculino">Masculino</option>
-                  <option value="outro">Outro</option>
-                </select>
-              </div>
-            </div>
+            <AuthField label="SEXO" htmlFor="sexo">
+              <select id="sexo" name="sexo" value={formData.sexo} onChange={handleChange}>
+                <option value="">Selecione...</option>
+                <option value="feminino">Feminino</option>
+                <option value="masculino">Masculino</option>
+                <option value="outro">Outro</option>
+              </select>
+            </AuthField>
 
             <div className={styles.row}>
-              <div className={styles.field}>
-                <label className={styles.label} htmlFor="peso">
-                  PESO (kg)
-                </label>
-                <div className={styles.inputShell}>
-                  <input
-                    id="peso"
-                    name="peso"
-                    type="number"
-                    className={styles.input}
-                    placeholder="Ex: 70"
-                    value={formData.peso}
-                    onChange={handleChange}
-                    min="1"
-                    step="1"
-                    autoComplete="off"
-                  />
-                </div>
-              </div>
+              <AuthField label="PESO (kg)" htmlFor="peso">
+                <input
+                  id="peso"
+                  name="peso"
+                  type="number"
+                  placeholder="Ex: 70"
+                  value={formData.peso}
+                  onChange={handleChange}
+                  min="1"
+                  step="1"
+                  autoComplete="off"
+                />
+              </AuthField>
 
-              <div className={styles.field}>
-                <label className={styles.label} htmlFor="altura">
-                  ALTURA (cm)
-                </label>
-                <div className={styles.inputShell}>
-                  <input
-                    id="altura"
-                    name="altura"
-                    type="number"
-                    className={styles.input}
-                    placeholder="Ex: 175"
-                    value={formData.altura}
-                    onChange={handleChange}
-                    min="1"
-                    step="1"
-                    autoComplete="off"
-                  />
-                </div>
-              </div>
+              <AuthField label="ALTURA (cm)" htmlFor="altura">
+                <input
+                  id="altura"
+                  name="altura"
+                  type="number"
+                  placeholder="Ex: 175"
+                  value={formData.altura}
+                  onChange={handleChange}
+                  min="1"
+                  step="1"
+                  autoComplete="off"
+                />
+              </AuthField>
             </div>
 
             <Button type="submit" disabled={!isFormValid} className={styles.submit}>
@@ -198,4 +149,3 @@ export function RegisterDetailsScreen() {
     </div>
   );
 }
-

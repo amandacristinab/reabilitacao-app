@@ -1,0 +1,30 @@
+- generic [ref=e4]:
+  - banner "Neuroviva" [ref=e5]:
+    - button "Voltar" [ref=e6] [cursor=pointer]:
+      - img [ref=e7]
+    - img "neuroviva" [ref=e9]
+    - button "Ajuda" [disabled] [ref=e10]:
+      - img [ref=e11]
+  - main "Login" [ref=e13]:
+    - generic [ref=e14]:
+      - generic [ref=e15]:
+        - generic [ref=e16]: EMAIL
+        - generic [ref=e17]:
+          - textbox "EMAIL" [ref=e18]:
+            - /placeholder: Insira o seu email
+          - button "Entrada por voz" [disabled] [ref=e20]:
+            - img [ref=e21]
+      - generic [ref=e24]:
+        - generic [ref=e25]: SENHA
+        - generic [ref=e26]:
+          - textbox "SENHA" [ref=e27]:
+            - /placeholder: ••••••••
+          - button "Mostrar senha" [ref=e29] [cursor=pointer]:
+            - img [ref=e30]
+      - checkbox "Manter conectado" [checked] [ref=e33]:
+        - img [ref=e35]
+        - generic [ref=e37]: Manter conectado
+      - button "ENTRAR" [disabled] [ref=e38]
+    - generic [ref=e39]:
+      - generic [ref=e40]: Não tem uma conta?
+      - button "Clique aqui para criar" [ref=e41] [cursor=pointer]

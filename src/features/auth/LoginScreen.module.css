@@ -13,67 +13,7 @@
     calc(24px + env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
-  gap: 24px;
-}
-
-.statusBar {
-  width: 100%;
-  height: auto;
-  display: block;
-  margin: -4px 0 2px 0;
-  user-select: none;
-  -webkit-user-drag: none;
-}
-
-.header {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-}
-
-.backButton {
-  justify-self: start;
-  width: var(--auth-header-action);
-  height: var(--auth-header-action);
-  border-radius: 999px;
-  border: none;
-  background: rgba(45, 212, 191, 0.22);
-  color: rgba(30, 41, 59, 0.85);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  cursor: pointer;
-}
-
-.backButton:active {
-  transform: translateY(1px);
-}
-
-.logo {
-  width: var(--auth-logo-width);
-  height: auto;
-  display: block;
-  margin: 0 auto;
-}
-
-.helpButton {
-  justify-self: end;
-  width: var(--auth-header-action);
-  height: var(--auth-header-action);
-  border-radius: 999px;
-  border: 2px solid rgba(148, 163, 184, 0.45);
-  background: transparent;
-  color: rgba(30, 41, 59, 0.75);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-}
-
-.helpButton:disabled {
-  opacity: 1;
-  cursor: default;
+  gap: 58px;
 }
 
 .main {
@@ -90,53 +30,7 @@
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-}
-
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.label {
-  font-size: 13px;
-  font-weight: 900;
-  color: rgba(30, 41, 59, 0.74);
-  letter-spacing: 0.5px;
-  padding-left: 2px;
-}
-
-.inputShell {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  gap: 10px;
-  min-height: 64px;
-  padding: 12px 12px 12px 16px;
-  border-radius: var(--radius-md);
-  background: #ffffff;
-  border: 1px solid rgba(226, 232, 240, 1);
-  box-shadow: 0 12px 22px rgba(2, 6, 23, 0.06);
-}
-
-.inputShell:focus-within {
-  border-color: rgba(45, 212, 191, 0.9);
-  box-shadow: 0 0 0 4px rgba(45, 212, 191, 0.18);
-}
-
-.input {
-  width: 100%;
-  border: none;
-  outline: none;
-  background: transparent;
-  font-size: 16px;
-  color: var(--color-text);
-}
-
-.input::placeholder {
-  color: rgba(148, 163, 184, 0.9);
-  font-weight: 600;
+  gap: 22px;
 }
 
 .iconButton {
@@ -144,46 +38,43 @@
   height: var(--touch-target);
   border-radius: 999px;
   border: none;
-  background: rgba(15, 23, 42, 0.92);
+  background: rgba(15, 23, 42, 0.94);
   color: #ffffff;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   flex: none;
+  padding: 0;
 }
 
-.iconButton:active {
+.iconButton:disabled {
+  opacity: 1;
+  cursor: default;
+}
+
+.iconButton:active:not(:disabled) {
   transform: translateY(1px);
 }
 
-.keepConnected {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 13px;
-  color: rgba(30, 41, 59, 0.72);
-  font-weight: 700;
-  user-select: none;
-}
-
-.keepConnected input {
-  width: 18px;
-  height: 18px;
-  accent-color: var(--color-primary);
-}
-
 .submit {
-  margin-top: 6px;
+  margin-top: 0;
+  min-height: 78px;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.submit:disabled {
+  color: var(--color-text);
 }
 
 .footer {
-  margin-top: auto;
+  margin-top: clamp(56px, 10dvh, 96px);
   padding-top: 6px;
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 36px;
   width: 100%;
   max-width: var(--auth-content-max);
   margin-left: auto;
@@ -191,35 +82,43 @@
 }
 
 .footerText {
-  font-size: 16px;
-  color: rgba(30, 41, 59, 0.75);
-  font-weight: 700;
+  font-size: 18px;
+  color: #000000;
+  font-weight: 500;
 }
 
 .footerLink {
   background: transparent;
   border: none;
   padding: 0;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 900;
   text-decoration: underline;
   cursor: pointer;
-  color: rgba(30, 41, 59, 0.95);
-}
-
-@media (max-height: 640px) {
-  .container {
-    padding-top: calc(22px + env(safe-area-inset-top));
-    padding-bottom: calc(18px + env(safe-area-inset-bottom));
-    gap: 16px;
-  }
-
-  .inputShell {
-    min-height: 58px;
-  }
+  color: var(--color-text);
 }
 
 .footerLink:active {
   transform: translateY(1px);
 }
 
+@media (max-height: 700px) {
+  .container {
+    gap: 34px;
+    padding-top: calc(22px + env(safe-area-inset-top));
+    padding-bottom: calc(18px + env(safe-area-inset-bottom));
+  }
+
+  .form {
+    gap: 16px;
+  }
+
+  .submit {
+    min-height: 64px;
+  }
+
+  .footer {
+    margin-top: 34px;
+    gap: 18px;
+  }
+}

@@ -1,0 +1,21 @@
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 18px;
+  color: var(--color-text);
+  font-weight: 500;
+  user-select: none;
+}
+
+.mark {
+  width: 33px;
+  height: 33px;
+  border-radius: 6px;
+  background: #637bff;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
