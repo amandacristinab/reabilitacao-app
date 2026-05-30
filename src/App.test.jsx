@@ -211,12 +211,46 @@ test("logout clears saved session and local user can log in again as new patient
 test("exercise list navigates to intro and then to player", async () => {
   renderApp(["/app/exercises"]);
 
+  expect(screen.getByRole("navigation", { name: /Navega..o principal/i })).toBeInTheDocument();
+
   await userEvent.click(screen.getByRole("button", { name: /come/i }));
   expect(screen.getByRole("heading", { name: /Deslizamento de toalha/i })).toBeInTheDocument();
-  expect(screen.getByRole("img", { name: /Deslizamento de toalha/i })).toBeInTheDocument();
+  expect(screen.getByText(/Coloque a m.o sobre uma toalha e se posicione/i)).toBeInTheDocument();
+  expect(screen.getByText(/Sente-se com os p.s no ch.o/i)).toBeInTheDocument();
+  expect(screen.getByText(/Se doer ou formigar/i)).toBeInTheDocument();
+  expect(screen.queryByRole("navigation", { name: /Navega..o principal/i })).not.toBeInTheDocument();
+
+  const demonstration = screen.getByRole("img", { name: /Deslizamento de toalha/i });
+  expect(demonstration).toHaveAttribute("src", expect.stringContaining("Deslizamento"));
+
+  await userEvent.click(screen.getByRole("button", { name: /Reproduzir demonstra..o/i }));
+  expect(screen.getByRole("img", { name: /Deslizamento de toalha/i })).toHaveAttribute(
+    "src",
+    expect.stringContaining("deslizamento_bia"),
+  );
+
+  await userEvent.click(screen.getByRole("button", { name: /Pausar demonstra..o/i }));
+  expect(screen.getByRole("img", { name: /Deslizamento de toalha/i })).toHaveAttribute(
+    "src",
+    expect.stringContaining("Deslizamento"),
+  );
+
+  await userEvent.click(screen.getByRole("button", { name: /Reproduzir demonstra..o/i }));
+  expect(screen.getByRole("img", { name: /Deslizamento de toalha/i })).toHaveAttribute(
+    "src",
+    expect.stringContaining("deslizamento_bia"),
+  );
 
   await userEvent.click(screen.getByRole("button", { name: /exerc/i }));
   expect(screen.getByRole("button", { name: "INICIAR" })).toBeInTheDocument();
+  expect(screen.queryByRole("navigation", { name: /Navega..o principal/i })).not.toBeInTheDocument();
+});
+
+test("exercise completion restores the bottom navigation", () => {
+  renderApp(["/app/exercises/towel-slide/completed"]);
+
+  expect(screen.getByRole("heading", { name: /Conclu.do/i })).toBeInTheDocument();
+  expect(screen.getByRole("navigation", { name: /Navega..o principal/i })).toBeInTheDocument();
 });
 
 test("completing an exercise saves activity and shows on dashboard", async () => {

@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import towelSlideImage from "../../../assets/deslizamento_bia.gif";
+import towelSlidePreview from "../../../assets/Deslizamento de toalha.png";
 import { useSession } from "../../app/state/session";
 import { ScreenHeader } from "../../shared/ui/ScreenHeader";
 import { findExerciseById } from "./data/exercises";
@@ -8,6 +9,10 @@ import styles from "./ExerciseIntroScreen.module.css";
 
 const INTRO_IMAGES_BY_ID = {
   "towel-slide": towelSlideImage,
+};
+
+const INTRO_PREVIEWS_BY_ID = {
+  "towel-slide": towelSlidePreview,
 };
 
 const INTRO_CONTENT_BY_ID = {
@@ -24,8 +29,17 @@ export function ExerciseIntroScreen() {
   const { activePatientId } = useSession();
   const exercise = useMemo(() => findExerciseById(exerciseId, activePatientId), [activePatientId, exerciseId]);
   const introImage = INTRO_IMAGES_BY_ID[String(exerciseId)] ?? null;
+  const introPreview = INTRO_PREVIEWS_BY_ID[String(exerciseId)] ?? introImage;
   const content = INTRO_CONTENT_BY_ID[String(exerciseId)] ?? null;
   const [gifReplayKey, setGifReplayKey] = useState(0);
+  const [isDemoPlaying, setIsDemoPlaying] = useState(false);
+
+  function toggleDemo() {
+    setIsDemoPlaying((isPlaying) => {
+      if (!isPlaying) setGifReplayKey((k) => k + 1);
+      return !isPlaying;
+    });
+  }
 
   if (!exercise) {
     return (
@@ -51,14 +65,19 @@ export function ExerciseIntroScreen() {
 
         {content?.instruction ? <p className={styles.instruction}>{content.instruction}</p> : null}
 
-        {introImage ? (
+        {introPreview ? (
           <button
             type="button"
             className={styles.imageButton}
-            onClick={() => setGifReplayKey((k) => k + 1)}
-            aria-label="Reproduzir demonstração"
+            onClick={toggleDemo}
+            aria-label={isDemoPlaying ? "Pausar demonstração" : "Reproduzir demonstração"}
           >
-            <img key={gifReplayKey} src={introImage} alt={exercise.name} className={styles.image} />
+            <img
+              key={isDemoPlaying ? gifReplayKey : "preview"}
+              src={isDemoPlaying ? introImage : introPreview}
+              alt={exercise.name}
+              className={styles.image}
+            />
           </button>
         ) : (
           <div className={styles.imagePlaceholder} aria-label="Imagem do exercício indisponível" />

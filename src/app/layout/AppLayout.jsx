@@ -17,13 +17,18 @@ function getActiveId(pathname) {
   return "dashboard";
 }
 
+function isFocusedExerciseRoute(pathname) {
+  return /^\/app\/exercises\/[^/]+(?:\/intro)?$/.test(pathname);
+}
+
 export function AppLayout() {
   const location = useLocation();
   const activeId = getActiveId(location.pathname);
   const hideBottomNav =
     location.pathname.startsWith("/app/triagem") ||
     location.pathname.startsWith("/app/avaliacao-fisica") ||
-    location.pathname.startsWith("/app/agendamento");
+    location.pathname.startsWith("/app/agendamento") ||
+    isFocusedExerciseRoute(location.pathname);
 
   return (
     <div className={styles.page}>
