@@ -6,12 +6,13 @@ import { AuthField } from "./components/AuthField";
 import { AuthHeader } from "./components/AuthHeader";
 import { Button } from "../../shared/ui/Button";
 import { useSession } from "../../app/state/session";
-import { DEFAULT_PATIENT_ID, getPatients } from "../../shared/data/mockData";
+import { NEW_PATIENT_ID, getPatients } from "../../shared/data/mockData";
+import { findLocalUserByEmail } from "./authStorage";
 import styles from "./LoginScreen.module.css";
 
 export function LoginScreen() {
   const navigate = useNavigate();
-  const { setActivePatientId, setUserName } = useSession();
+  const { setSession } = useSession();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -20,10 +21,18 @@ export function LoginScreen() {
 
   const handleLogin = () => {
     if (!isFormValid) return;
-    const patient = getPatients().find((item) => item.email?.toLowerCase() === email.trim().toLowerCase());
-    const fallbackName = email.includes("@") ? email.split("@")[0] : email;
-    setActivePatientId(patient?.id ?? DEFAULT_PATIENT_ID);
-    setUserName(patient?.displayName ?? fallbackName ?? "UTILIZADOR");
+    const normalizedEmail = email.trim().toLowerCase();
+    const localUser = findLocalUserByEmail(normalizedEmail);
+    const patient = getPatients().find((item) => item.email?.toLowerCase() === normalizedEmail);
+    const fallbackName = normalizedEmail.includes("@") ? normalizedEmail.split("@")[0] : normalizedEmail;
+    const activePatientId = localUser?.patientId ?? patient?.id ?? NEW_PATIENT_ID;
+    const displayName = localUser?.displayName ?? patient?.displayName ?? fallbackName ?? "UTILIZADOR";
+
+    setSession({
+      activePatientId,
+      userName: displayName,
+      email: normalizedEmail,
+    });
     navigate("/app/dashboard");
   };
 

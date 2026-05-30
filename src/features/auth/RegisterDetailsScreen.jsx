@@ -5,11 +5,12 @@ import { AuthHeader } from "./components/AuthHeader";
 import { Button } from "../../shared/ui/Button";
 import { useSession } from "../../app/state/session";
 import { NEW_PATIENT_ID } from "../../shared/data/mockData";
+import { saveLocalUser } from "./authStorage";
 import styles from "./RegisterDetailsScreen.module.css";
 
 export function RegisterDetailsScreen() {
   const navigate = useNavigate();
-  const { setActivePatientId, setUserName } = useSession();
+  const { setSession } = useSession();
   const [formData, setFormData] = useState({
     nomeCompleto: "",
     email: "",
@@ -46,8 +47,19 @@ export function RegisterDetailsScreen() {
   const handleSubmit = (e) => {
     e?.preventDefault?.();
     if (!isFormValid) return;
-    setActivePatientId(NEW_PATIENT_ID);
-    setUserName(formData.nomeCompleto.trim() || "UTILIZADOR");
+    const displayName = formData.nomeCompleto.trim() || "UTILIZADOR";
+    const email = formData.email.trim();
+
+    saveLocalUser({
+      email,
+      displayName,
+      patientId: NEW_PATIENT_ID,
+    });
+    setSession({
+      activePatientId: NEW_PATIENT_ID,
+      userName: displayName,
+      email,
+    });
     navigate("/success");
   };
 
