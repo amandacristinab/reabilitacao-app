@@ -6,7 +6,11 @@ const SessionContext = createContext(null);
 
 function normalizeName(name) {
   if (!name) return "";
-  return String(name).trim().toUpperCase();
+  return String(name)
+    .trim()
+    .split(/\s+/)
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+    .join(" ");
 }
 
 export function SessionProvider({ children, initialActivePatientId }) {

@@ -99,7 +99,7 @@ test("dashboard shows triage call to action for a new patient without triage", (
 
   expect(screen.getByText("Oi, Novo paciente!")).toBeInTheDocument();
   expect(screen.getByText(/AVALIA..O GRATUITA/i)).toBeInTheDocument();
-  expect(screen.getAllByRole("button", { name: /INICIAR TRIAGEM/i })).toHaveLength(2);
+  expect(screen.getAllByRole("button", { name: /AGENDAR AVALIA..O/i })).toHaveLength(2);
   expect(screen.queryByText("PLANO DE CUIDADOS ATIVO")).not.toBeInTheDocument();
   expect(screen.queryByText("Rotina prescrita")).not.toBeInTheDocument();
 });
@@ -124,7 +124,7 @@ test("saved local session keeps the new patient after remount", () => {
 
   renderApp(["/app/dashboard"]);
 
-  expect(screen.getByText("Oi, MARIA NOVA!")).toBeInTheDocument();
+  expect(screen.getByText("Oi, Maria Nova!")).toBeInTheDocument();
   expect(screen.getByText(/AVALIA..O GRATUITA/i)).toBeInTheDocument();
   expect(screen.queryByText("PLANO DE CUIDADOS ATIVO")).not.toBeInTheDocument();
 });
@@ -138,7 +138,7 @@ test("login with a locally registered user opens the new patient dashboard", asy
 
   await loginWithEmail("joao@example.com");
 
-  expect(screen.getByText("Oi, JOAO LOCAL!")).toBeInTheDocument();
+  expect(screen.getByText("Oi, Joao Local!")).toBeInTheDocument();
   expect(screen.getByText(/AVALIA..O GRATUITA/i)).toBeInTheDocument();
   expect(screen.queryByText("PLANO DE CUIDADOS ATIVO")).not.toBeInTheDocument();
 });
@@ -154,7 +154,7 @@ test("login with Dona Cida mock still opens the active care plan", async () => {
 test("unknown login falls back to the new patient instead of Dona Cida", async () => {
   await loginWithEmail("desconhecido@example.com");
 
-  expect(screen.getByText("Oi, DESCONHECIDO!")).toBeInTheDocument();
+  expect(screen.getByText("Oi, Desconhecido!")).toBeInTheDocument();
   expect(screen.getByText(/AVALIA..O GRATUITA/i)).toBeInTheDocument();
   expect(screen.queryByText("PLANO DE CUIDADOS ATIVO")).not.toBeInTheDocument();
 });
@@ -179,7 +179,7 @@ test("logout clears saved session and local user can log in again as new patient
   view.unmount();
   await loginWithEmail("ana@example.com");
 
-  expect(screen.getByText("Oi, ANA LOCAL!")).toBeInTheDocument();
+  expect(screen.getByText("Oi, Ana Local!")).toBeInTheDocument();
   expect(screen.queryByText("PLANO DE CUIDADOS ATIVO")).not.toBeInTheDocument();
 });
 

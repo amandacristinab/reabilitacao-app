@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { ClipboardList, Clock3, Dumbbell, HelpCircle, LogOut, ShieldCheck, Sparkles, Stethoscope } from "lucide-react";
+import { ClipboardList, Clock3, Dumbbell, HelpCircle, LogOut, ShieldCheck, Sparkles, Stethoscope, UserRound } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useSession } from "../../app/state/session";
 import { getDefaultPatient, getPatientById } from "../../shared/data/mockData";
@@ -96,14 +96,16 @@ export function DashboardScreen() {
 
     return {
       prompt: "Vamos começar sua jornada?",
-      cardTitle: "AVALIAÇÃO GRATUITA",
-      firstItem: "Responda uma triagem rápida e simples",
-      secondItem: "Depois, agende um teleatendimento para orientar seus próximos passos",
-      footer: "A triagem não substitui avaliação profissional.",
-      cardButton: "INICIAR TRIAGEM",
-      cardAria: "Iniciar triagem",
-      primaryButton: "INICIAR TRIAGEM",
-      primaryAria: "Iniciar triagem",
+      cardTitle: "FAÇA SUA AVALIAÇÃO GRATUITA",
+      firstItem: "Encontre um profissional da saúde",
+      firstIcon: <UserRound size={18} />,
+      secondItem: "Faça uma órtese personalizada",
+      secondIcon: <ShieldCheck size={18} />,
+      footer: "Libere treinos personalizados e acompanhamento profissional",
+      cardButton: "AGENDAR AVALIAÇÃO",
+      cardAria: "Agendar avaliação",
+      primaryButton: "AGENDAR AVALIAÇÃO",
+      primaryAria: "Agendar avaliação",
       cardTarget: "/app/triagem",
       primaryTarget: "/app/triagem",
       primaryIcon: <ClipboardList size={28} />,
@@ -218,13 +220,13 @@ export function DashboardScreen() {
             <ul className={styles.assessmentList} aria-label="Resumo da jornada">
               <li className={styles.assessmentItem}>
                 <span className={styles.assessmentIcon} aria-hidden="true">
-                  <Stethoscope size={18} />
+                  {dashboardCopy.firstIcon ?? <Stethoscope size={18} />}
                 </span>
                 <span>{dashboardCopy.firstItem}</span>
               </li>
               <li className={styles.assessmentItem}>
                 <span className={styles.assessmentIcon} aria-hidden="true">
-                  <Sparkles size={18} />
+                  {dashboardCopy.secondIcon ?? <Sparkles size={18} />}
                 </span>
                 <span>{dashboardCopy.secondItem}</span>
               </li>

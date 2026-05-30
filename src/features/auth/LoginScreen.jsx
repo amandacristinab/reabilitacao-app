@@ -24,7 +24,8 @@ export function LoginScreen() {
     const normalizedEmail = email.trim().toLowerCase();
     const localUser = findLocalUserByEmail(normalizedEmail);
     const patient = getPatients().find((item) => item.email?.toLowerCase() === normalizedEmail);
-    const fallbackName = normalizedEmail.includes("@") ? normalizedEmail.split("@")[0] : normalizedEmail;
+    const emailPrefix = normalizedEmail.includes("@") ? normalizedEmail.split("@")[0] : normalizedEmail;
+    const fallbackName = emailPrefix.split(/[._\-]/)[0];
     const activePatientId = localUser?.patientId ?? patient?.id ?? NEW_PATIENT_ID;
     const displayName = localUser?.displayName ?? patient?.displayName ?? fallbackName ?? "UTILIZADOR";
 
