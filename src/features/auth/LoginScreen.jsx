@@ -3,12 +3,13 @@ import { ChevronLeft, CircleHelp, Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../../shared/ui/Button";
 import { useSession } from "../../app/state/session";
+import { DEFAULT_PATIENT_ID, getPatients } from "../../shared/data/mockData";
 import logo from "../../../assets/logo.png";
 import styles from "./LoginScreen.module.css";
 
 export function LoginScreen() {
   const navigate = useNavigate();
-  const { setUserName } = useSession();
+  const { setActivePatientId, setUserName } = useSession();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -17,8 +18,10 @@ export function LoginScreen() {
 
   const handleLogin = () => {
     if (!isFormValid) return;
-    const name = email.includes("@") ? email.split("@")[0] : email;
-    setUserName(name || "UTILIZADOR");
+    const patient = getPatients().find((item) => item.email?.toLowerCase() === email.trim().toLowerCase());
+    const fallbackName = email.includes("@") ? email.split("@")[0] : email;
+    setActivePatientId(patient?.id ?? DEFAULT_PATIENT_ID);
+    setUserName(patient?.displayName ?? fallbackName ?? "UTILIZADOR");
     navigate("/app/dashboard");
   };
 

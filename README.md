@@ -71,6 +71,8 @@ Implementado ou parcialmente implementado:
 - splash e escolha entre criar conta/entrar;
 - login e cadastro simulados;
 - dados mockados para Dona Cida e novo paciente;
+- camada simples de leitura para `patients.json`, `exercises.json` e `scheduleSlots.json`;
+- consumo inicial do paciente ativo na home, exercicios, progresso e perfil;
 - tela inicial do paciente;
 - triagem inicial;
 - inicio do fluxo de agendamento por WhatsApp;
@@ -80,9 +82,11 @@ Implementado ou parcialmente implementado:
 - historico local de exercicios;
 - progresso e perfil em versao inicial;
 - testes automatizados para fluxos principais e regras de pose.
+- testes unitarios para leitura dos mocks e prescricoes.
 
 Pendente ou incompleto:
 
+- integracao completa dos mocks em todos os fluxos, especialmente cadastro e agendamento;
 - cadastro completo com senha, confirmacao e aceite de termos;
 - estados reais da jornada do paciente na home;
 - calendario, horario e confirmacao do agendamento;
@@ -102,9 +106,10 @@ Pendente ou incompleto:
 
 ## Proximos Passos Recomendados
 
-1. Alinhar o tema global e componentes-base ao design system.
-2. Corrigir o fluxo de cadastro conforme requisitos.
-3. Implementar os estados da home por etapa da jornada.
-4. Completar o fluxo de agendamento.
-5. Adicionar avaliacao pos-exercicio e conectar ao progresso.
-6. Preparar arquitetura para backend em uma etapa futura.
+1. Consolidar a camada de dados mockados como fonte unica para telas e fluxos.
+2. Corrigir textos/encoding restantes e alinhar o tema global ao design system.
+3. Corrigir o fluxo de cadastro conforme requisitos.
+4. Implementar os estados da home por etapa da jornada.
+5. Completar o fluxo de agendamento com calendario, horario e confirmacao.
+6. Adicionar avaliacao pos-exercicio e conectar ao progresso.
+7. Preparar arquitetura para backend em uma etapa futura.

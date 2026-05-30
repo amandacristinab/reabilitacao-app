@@ -3,12 +3,13 @@ import { ChevronLeft, CircleHelp } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../../shared/ui/Button";
 import { useSession } from "../../app/state/session";
+import { NEW_PATIENT_ID } from "../../shared/data/mockData";
 import logo from "../../../assets/logo.png";
 import styles from "./RegisterDetailsScreen.module.css";
 
 export function RegisterDetailsScreen() {
   const navigate = useNavigate();
-  const { setUserName } = useSession();
+  const { setActivePatientId, setUserName } = useSession();
   const [formData, setFormData] = useState({
     nomeCompleto: "",
     email: "",
@@ -45,6 +46,7 @@ export function RegisterDetailsScreen() {
   const handleSubmit = (e) => {
     e?.preventDefault?.();
     if (!isFormValid) return;
+    setActivePatientId(NEW_PATIENT_ID);
     setUserName(formData.nomeCompleto.trim() || "UTILIZADOR");
     navigate("/success");
   };

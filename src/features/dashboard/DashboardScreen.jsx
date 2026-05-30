@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import { Dumbbell, HelpCircle, LogOut, Sparkles, Stethoscope } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useSession } from "../../app/state/session";
+import { getDefaultPatient, getPatientById } from "../../shared/data/mockData";
 import { useExerciseHistory } from "../../shared/hooks/useExerciseHistory";
 import logo from "../../../assets/logo.png";
 import character from "../../../assets/donacida2 1.png";
@@ -19,8 +20,12 @@ function localDateKey(date) {
 
 export function DashboardScreen() {
   const navigate = useNavigate();
-  const { userName, logout } = useSession();
+  const { activePatientId, userName, logout } = useSession();
   const exerciseHistory = useExerciseHistory();
+  const patient = getPatientById(activePatientId) ?? getDefaultPatient();
+  const carePlan = patient?.carePlan ?? null;
+  const hasCarePlan = Boolean(patient?.hasCarePlan && carePlan);
+  const displayName = userName || patient?.displayName?.toUpperCase() || "UTILIZADOR";
 
   const { weekDays, practicedCount, recentActivities, lastActivityWhen } = useMemo(() => {
     const now = new Date();
@@ -44,7 +49,7 @@ export function DashboardScreen() {
     const weekDays = days.map((d, idx) => {
       const key = localDateKey(d);
       const isDone = activityKeys.has(key);
-      const dayLabel = DAY_LABELS[d.getDay()] ?? "•";
+      const dayLabel = DAY_LABELS[d.getDay()] ?? ".";
       return { key, dayLabel, isDone, doneColor: DONE_COLORS[idx] ?? "#22c55e" };
     });
 
@@ -90,8 +95,8 @@ export function DashboardScreen() {
 
       <section className={styles.hero} aria-label="Boas-vindas">
         <div className={styles.heroText}>
-          <h2 className={styles.greeting}>Oi, {userName || "UTILIZADOR"}!</h2>
-          <p className={styles.prompt}>Vamos praticar?</p>
+          <h2 className={styles.greeting}>Oi, {displayName}!</h2>
+          <p className={styles.prompt}>{hasCarePlan ? "Vamos praticar?" : "Vamos começar sua jornada?"}</p>
         </div>
         <img src={character} alt="" className={styles.character} />
       </section>
@@ -99,7 +104,9 @@ export function DashboardScreen() {
       <div className={styles.content}>
         <section className={styles.assessmentCard} aria-label="Avaliação física">
           <div className={styles.assessmentHeader}>
-            <h3 className={styles.assessmentTitle}>FAÇA SUA AVALIAÇÃO GRATUITA</h3>
+            <h3 className={styles.assessmentTitle}>
+              {hasCarePlan ? "PLANO DE CUIDADOS ATIVO" : "FAÇA SUA AVALIAÇÃO GRATUITA"}
+            </h3>
             <div className={styles.assessmentChevron} aria-hidden="true" />
           </div>
 
@@ -108,26 +115,30 @@ export function DashboardScreen() {
               <span className={styles.assessmentIcon} aria-hidden="true">
                 <Stethoscope size={18} />
               </span>
-              <span>Encontre um profissional da saúde</span>
+              <span>{carePlan?.professional?.name ?? "Encontre um profissional da saúde"}</span>
             </li>
             <li className={styles.assessmentItem}>
               <span className={styles.assessmentIcon} aria-hidden="true">
                 <Sparkles size={18} />
               </span>
-              <span>Faça uma órtese personalizada</span>
+              <span>{patient?.hasOrthosis ? "Órtese personalizada entregue" : "Faça uma órtese personalizada"}</span>
             </li>
           </ul>
 
           <button
             type="button"
             className={styles.assessmentCta}
-            onClick={() => navigate("/app/triagem")}
-            aria-label="Agendar avaliação"
+            onClick={() => navigate(hasCarePlan ? "/app/exercises" : "/app/triagem")}
+            aria-label={hasCarePlan ? "Ver exercícios" : "Agendar avaliação"}
           >
-            AGENDAR AVALIAÇÃO
+            {hasCarePlan ? "VER EXERCÍCIOS" : "AGENDAR AVALIAÇÃO"}
           </button>
 
-          <p className={styles.assessmentFooter}>Libere treinos personalizados e acompanhamento profissional</p>
+          <p className={styles.assessmentFooter}>
+            {hasCarePlan
+              ? carePlan?.objective ?? "Rotina personalizada liberada"
+              : "Libere treinos personalizados e acompanhamento profissional"}
+          </p>
         </section>
         <button
           type="button"
@@ -158,7 +169,7 @@ export function DashboardScreen() {
           </div>
           <p className={styles.weekSub}>Você praticou {practicedCount} de 7 dias</p>
           <p className={styles.lastLine}>
-            Último exercício: <strong className={styles.lastValue}>{lastActivityWhen || "—"}</strong>
+            Último exercício: <strong className={styles.lastValue}>{lastActivityWhen || "-"}</strong>
           </p>
         </section>
 

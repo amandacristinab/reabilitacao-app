@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { AlertTriangle, Camera, ChevronLeft, Hand, Pause, Play, RefreshCw } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useSession } from "../../app/state/session";
 import { useUserMedia } from "../../shared/hooks/useUserMedia";
 import { findExerciseById } from "./data/exercises";
 import { useActivity } from "../../app/state/activity";
@@ -27,7 +28,8 @@ function clampInt(value, { min = 1, max = 99 } = {}) {
 export function ExercisePlayerScreen() {
   const navigate = useNavigate();
   const { exerciseId } = useParams();
-  const exercise = useMemo(() => findExerciseById(exerciseId), [exerciseId]);
+  const { activePatientId } = useSession();
+  const exercise = useMemo(() => findExerciseById(exerciseId, activePatientId), [activePatientId, exerciseId]);
   const { addExerciseCompleted } = useActivity();
 
   const durationSeconds = exercise?.durationSeconds ?? 30;

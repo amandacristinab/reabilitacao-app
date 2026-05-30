@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import towelSlideImage from "../../../assets/deslizamento_bia.gif";
+import { useSession } from "../../app/state/session";
 import { ScreenHeader } from "../../shared/ui/ScreenHeader";
 import { findExerciseById } from "./data/exercises";
 import styles from "./ExerciseIntroScreen.module.css";
@@ -20,7 +21,8 @@ const INTRO_CONTENT_BY_ID = {
 export function ExerciseIntroScreen() {
   const navigate = useNavigate();
   const { exerciseId } = useParams();
-  const exercise = useMemo(() => findExerciseById(exerciseId), [exerciseId]);
+  const { activePatientId } = useSession();
+  const exercise = useMemo(() => findExerciseById(exerciseId, activePatientId), [activePatientId, exerciseId]);
   const introImage = INTRO_IMAGES_BY_ID[String(exerciseId)] ?? null;
   const content = INTRO_CONTENT_BY_ID[String(exerciseId)] ?? null;
   const [gifReplayKey, setGifReplayKey] = useState(0);

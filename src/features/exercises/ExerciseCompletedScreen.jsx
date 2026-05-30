@@ -1,8 +1,9 @@
 import React, { useMemo } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useActivity } from "../../app/state/activity";
+import { useSession } from "../../app/state/session";
 import { BackButton } from "../../shared/ui/BackButton";
 import { Button } from "../../shared/ui/Button";
-import { useActivity } from "../../app/state/activity";
 import { findExerciseById } from "./data/exercises";
 import styles from "./ExerciseCompletedScreen.module.css";
 
@@ -11,8 +12,9 @@ export function ExerciseCompletedScreen() {
   const location = useLocation();
   const { exerciseId } = useParams();
   const { activities } = useActivity();
+  const { activePatientId } = useSession();
 
-  const exercise = useMemo(() => findExerciseById(exerciseId), [exerciseId]);
+  const exercise = useMemo(() => findExerciseById(exerciseId, activePatientId), [activePatientId, exerciseId]);
 
   const details = useMemo(() => {
     const fromState = location?.state && typeof location.state === "object" ? location.state : null;
@@ -41,11 +43,11 @@ export function ExerciseCompletedScreen() {
       <div className={styles.card} aria-label="Resumo">
         <div className={styles.row}>
           <span className={styles.label}>Séries</span>
-          <span className={styles.value}>{details.series ? `${details.series}/${details.series}` : "—"}</span>
+          <span className={styles.value}>{details.series ? `${details.series}/${details.series}` : "-"}</span>
         </div>
         <div className={styles.row}>
           <span className={styles.label}>Repetições</span>
-          <span className={styles.value}>{details.repetitions ?? "—"}</span>
+          <span className={styles.value}>{details.repetitions ?? "-"}</span>
         </div>
       </div>
 
@@ -58,4 +60,3 @@ export function ExerciseCompletedScreen() {
     </div>
   );
 }
-

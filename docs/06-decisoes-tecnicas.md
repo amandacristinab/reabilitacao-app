@@ -84,6 +84,12 @@ Diretriz:
 - duracao, series, repeticoes, frequencia e horarios devem ficar na prescricao individual do paciente;
 - em etapa futura, telas devem ler esses dados por uma camada de service, nao diretamente do JSON.
 
+Status atual:
+
+- os mocks previstos ja foram criados;
+- `src/shared/data/mockData.js` centraliza a leitura inicial desses dados;
+- a integracao ainda e parcial e deve ser consolidada antes de avancar para backend.
+
 ### DT06 - `localStorage` no MVP
 
 Decisao:
@@ -270,7 +276,8 @@ Ao adicionar nova funcionalidade:
 - Agendamento incompleto.
 - Uso de `localStorage` para dados que futuramente serao sensiveis.
 - Testes passam, mas alguns geram avisos de ambiente/`act(...)`.
-- Dados mockados ainda nao estao conectados as telas.
+- Dados mockados ainda estao apenas parcialmente conectados as telas.
+- Risco de textos com encoding/mojibake em arquivos antigos ou testes, especialmente apos edicoes em ambientes com configuracao diferente de UTF-8.
 
 ## Diretriz Para o TCC
 

@@ -4,9 +4,9 @@ import userEvent from "@testing-library/user-event";
 import { act } from "react";
 import { beforeEach, expect, test, vi } from "vitest";
 import { MemoryRouter } from "react-router-dom";
-import { AppRoutes } from "./app/routes";
-import { SessionProvider } from "./app/state/session";
 import { ActivityProvider } from "./app/state/activity";
+import { SessionProvider } from "./app/state/session";
+import { AppRoutes } from "./app/routes";
 
 function renderApp(initialEntries) {
   return render(
@@ -29,8 +29,7 @@ test("renders welcome screen", () => {
 
   expect(screen.getByRole("img", { name: /neuroviva/i })).toBeInTheDocument();
   expect(screen.getByText(/Sua companheira/i)).toBeInTheDocument();
-  expect(screen.getByRole("button", { name: "COMEÇAR" })).toBeInTheDocument();
-  expect(screen.getByRole("button", { name: "Começar" })).toBeInTheDocument();
+  expect(screen.getAllByRole("button", { name: /come/i })).toHaveLength(2);
 });
 
 test("renders auth choice screen with Limbse and buttons", () => {
@@ -58,29 +57,18 @@ test("auth choice buttons navigate to register and login", async () => {
   expect(screen.getByRole("button", { name: /Clique aqui para criar/i })).toBeInTheDocument();
 });
 
-test("dashboard renders greeting and exercise CTA", async () => {
+test("dashboard uses default patient data and opens the prescribed exercise list", async () => {
   renderApp(["/app/dashboard"]);
 
-  expect(screen.getByText("Oi, UTILIZADOR!")).toBeInTheDocument();
-  expect(screen.getByRole("button", { name: /AGENDAR AVALIAÇÃO/i })).toBeInTheDocument();
-  expect(screen.getByRole("button", { name: /FAZER UM EXERCÍCIO/i })).toBeInTheDocument();
+  expect(screen.getByText("Oi, DONA CIDA!")).toBeInTheDocument();
+  expect(screen.getByText("PLANO DE CUIDADOS ATIVO")).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: /VER EXERC/i })).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: /FAZER UM EXERC/i })).toBeInTheDocument();
 
-  await userEvent.click(screen.getByRole("button", { name: /AGENDAR AVALIAÇÃO/i }));
-  expect(screen.getByRole("heading", { name: /Olá! Eu sou a Fernanda/i })).toBeInTheDocument();
-
-  await userEvent.click(screen.getByRole("button", { name: /Pular triagem e agendar/i }));
-  expect(screen.getByRole("heading", { name: /Agendar teleatendimento/i })).toBeInTheDocument();
-  expect(screen.getByText("WHATSAPP")).toBeInTheDocument();
-  expect(screen.getByLabelText(/Número de WhatsApp/i)).toBeInTheDocument();
-
-  await userEvent.click(screen.getByRole("button", { name: "Voltar" }));
-  expect(screen.getByRole("heading", { name: /Olá! Eu sou a Fernanda/i })).toBeInTheDocument();
-
-  await userEvent.click(screen.getByRole("button", { name: "Voltar" }));
-  expect(screen.getByText("Oi, UTILIZADOR!")).toBeInTheDocument();
-
-  await userEvent.click(screen.getByRole("button", { name: /FAZER UM EXERCÍCIO/i }));
+  await userEvent.click(screen.getByRole("button", { name: /VER EXERC/i }));
   expect(screen.getByRole("heading", { name: "Exercícios" })).toBeInTheDocument();
+  expect(screen.getByText("Rotina prescrita")).toBeInTheDocument();
+  expect(screen.getByText(/5x\/semana/i)).toBeInTheDocument();
 });
 
 test("exercise list navigates to intro and then to player", async () => {
@@ -99,12 +87,10 @@ test("completing an exercise saves activity and shows on dashboard", async () =>
   try {
     const view = renderApp(["/app/exercises/towel-slide"]);
 
-    for (let i = 0; i < 3; i += 1) {
-      await userEvent.click(screen.getByRole("button", { name: "INICIAR" }));
-      await act(async () => {
-        vi.advanceTimersByTime(180_000);
-      });
-    }
+    await userEvent.click(screen.getByRole("button", { name: "INICIAR" }));
+    await act(async () => {
+      vi.advanceTimersByTime(180_000);
+    });
 
     expect(window.localStorage.getItem("neuroviva.activities.v1")).toBeTruthy();
 
@@ -113,7 +99,7 @@ test("completing an exercise saves activity and shows on dashboard", async () =>
     expect(screen.getByText("Histórico")).toBeInTheDocument();
     expect(screen.getByText(/Deslizamento de toalha/i)).toBeInTheDocument();
     expect(screen.getByText(/Último exercício:/i)).toBeInTheDocument();
-    expect(screen.getByText(/Último exercício:/i)).not.toHaveTextContent("—");
+    expect(screen.getByText(/Último exercício:/i)).not.toHaveTextContent("-");
   } finally {
     vi.useRealTimers();
   }
@@ -124,7 +110,7 @@ test("changing target series updates completion flow", async () => {
   try {
     renderApp(["/app/exercises/towel-slide"]);
 
-    await userEvent.click(screen.getByRole("button", { name: "Diminuir séries" }));
+    await userEvent.click(screen.getByRole("button", { name: "Aumentar séries" }));
 
     for (let i = 0; i < 2; i += 1) {
       await userEvent.click(screen.getByRole("button", { name: "INICIAR" }));

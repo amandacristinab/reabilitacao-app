@@ -85,6 +85,8 @@ Tambem existem armazenamentos locais especificos:
 - numero de WhatsApp;
 - configuracoes de exercicio, como repeticoes e series.
 
+A sessao tambem guarda `activePatientId`, usado para selecionar o paciente mockado ativo durante o MVP. O padrao atual e Dona Cida, porque ela representa o cenario com plano de cuidados ativo.
+
 ## Dados Mockados e Persistencia
 
 No MVP, existem dois tipos de dados:
@@ -100,6 +102,14 @@ Mocks previstos:
 - `src/mocks/exercises.json`: catalogo minimo do MVP, contendo apenas o Deslizamento de toalha.
 - `src/mocks/scheduleSlots.json`: datas e horarios simulados para teleatendimento.
 
+Estado atual:
+
+- os tres mocks previstos ja existem;
+- `src/shared/data/mockData.js` centraliza a leitura inicial de pacientes, exercicios e horarios;
+- home, exercicios, progresso e perfil ja consomem o paciente ativo em uma primeira versao;
+- algumas telas ainda usam textos fixos, estado local ou importacoes indiretas, entao a integracao dos mocks ainda nao esta completa;
+- o agendamento ainda nao consome `scheduleSlots.json` na interface final.
+
 Limites desta abordagem:
 
 - dados ficam apenas no navegador/dispositivo;
@@ -110,9 +120,10 @@ Limites desta abordagem:
 
 Evolucao recomendada:
 
-- criar uma camada de services para ler os mocks;
+- evoluir `mockData.js` para uma camada de services com contratos mais proximos de API;
 - trocar essa camada por chamadas HTTP quando houver backend;
-- evitar que componentes de tela importem diretamente JSONs em etapas futuras.
+- evitar que componentes de tela importem diretamente JSONs em etapas futuras;
+- conectar cadastro, home por estado e agendamento a essa mesma fonte de dados.
 
 ## Exercicios, Camera e MediaPipe
 

@@ -31,7 +31,7 @@ Criterio de aceite:
 
 Status:
 
-- em andamento/concluido nesta etapa.
+- concluida como base documental inicial.
 
 ## Fase 2 - Dados Mockados Estruturados
 
@@ -55,6 +55,14 @@ Criterio de aceite:
 - novo paciente representa usuario sem avaliacao;
 - o MVP nao promete outros exercicios alem do Deslizamento de toalha;
 - docs explicam como esses mocks serao substituidos por API no futuro.
+
+Status:
+
+- parcialmente concluida.
+- Os arquivos `patients.json`, `exercises.json` e `scheduleSlots.json` ja existem.
+- Existe uma camada simples de leitura dos mocks em `src/shared/data/mockData.js`.
+- Home, exercicios, progresso e perfil ja consomem o paciente ativo em uma primeira versao.
+- Ainda falta completar a integracao dos mocks em cadastro, estados da jornada, agendamento e futura camada de services mais robusta.
 
 ## Fase 3 - Design System no Codigo
 
@@ -222,11 +230,11 @@ Criterio de aceite:
 
 Ordem recomendada para os proximos ciclos:
 
-1. Fase 2: dados mockados estruturados.
+1. Concluir Fase 2: conectar mocks e paciente ativo a todos os fluxos navegaveis.
 2. Fase 3: design system no codigo.
 3. Fase 4: cadastro/login.
 4. Fase 5: home por estado.
 5. Fase 6: agendamento.
 6. Fase 7: pos-exercicio.
 
-Essa ordem reduz retrabalho, porque primeiro organiza os dados de demonstracao e depois estabelece padroes visuais e componentes compartilhados.
+Essa ordem reduz retrabalho, porque primeiro consolida os dados de demonstracao como fonte unica e depois estabelece padroes visuais e componentes compartilhados.

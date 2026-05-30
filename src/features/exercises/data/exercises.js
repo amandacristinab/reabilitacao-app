@@ -1,17 +1,7 @@
-export const EXERCISES = [
-  {
-    id: "towel-slide",
-    name: "Deslizamento de toalha",
-    durLabel: "2–3 min",
-    durationSeconds: 180,
-    repsLabel: "1 série",
-    suggestedRepetitions: 5,
-    targetSeries: 3,
-    levelLabel: "Leve",
-    icon: "🧻",
-  },
-];
+import { getExerciseCatalog, getExerciseForPatient } from "../../../shared/data/mockData";
 
-export function findExerciseById(exerciseId) {
-  return EXERCISES.find((e) => e.id === String(exerciseId)) ?? null;
+export const EXERCISES = getExerciseCatalog();
+
+export function findExerciseById(exerciseId, patientId) {
+  return getExerciseForPatient(exerciseId, patientId);
 }

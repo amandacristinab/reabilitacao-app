@@ -2,13 +2,21 @@ import React from "react";
 import { ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import character from "../../../assets/donacida2 1.png";
+import { useSession } from "../../app/state/session";
+import { getDefaultPatient, getExercisesForPatient, getPatientById } from "../../shared/data/mockData";
 import { ScreenHeader } from "../../shared/ui/ScreenHeader";
-import { findExerciseById } from "./data/exercises";
 import styles from "./ExerciseListScreen.module.css";
 
 export function ExerciseListScreen() {
   const navigate = useNavigate();
-  const exercise = findExerciseById("towel-slide");
+  const { activePatientId } = useSession();
+  const patient = getPatientById(activePatientId) ?? getDefaultPatient();
+  const carePlan = patient?.carePlan ?? null;
+  const hasCarePlan = Boolean(patient?.hasCarePlan && carePlan);
+  const exercises = getExercisesForPatient(patient?.id);
+  const exercise = exercises[0] ?? null;
+  const frequency = carePlan?.weeklyFrequency;
+  const firstPrescription = exercise?.prescriptions?.[0] ?? null;
 
   return (
     <div className={styles.page}>
@@ -17,8 +25,12 @@ export function ExerciseListScreen() {
       <section className={styles.hero} aria-label="Resumo de exercícios">
         <div className={styles.heroText}>
           <h2 className={styles.title}>Exercícios</h2>
-          <p className={styles.subtitle}>Rotina prescrita</p>
-          <p className={styles.subsubtitle}>5x/semana • 3 momentos/dia</p>
+          <p className={styles.subtitle}>{hasCarePlan ? "Rotina prescrita" : "Exercício demonstrativo"}</p>
+          <p className={styles.subsubtitle}>
+            {hasCarePlan && frequency
+              ? `${frequency.timesPerWeek}x/semana - ${frequency.momentsPerDay} momentos/dia`
+              : "Disponível sem avaliação"}
+          </p>
         </div>
         <img src={character} alt="" className={styles.character} />
       </section>
@@ -27,7 +39,9 @@ export function ExerciseListScreen() {
         <summary className={styles.summary}>
           <div className={styles.summaryLeft}>
             <span className={styles.summaryTitle}>Objetivo</span>
-            <span className={styles.summaryText}>Melhorar o movimento e a força</span>
+            <span className={styles.summaryText}>
+              {carePlan?.objective ?? exercise?.objective ?? "Apoiar mobilidade e controle do membro superior"}
+            </span>
           </div>
           <ChevronDown size={18} className={styles.chev} />
         </summary>
@@ -43,43 +57,48 @@ export function ExerciseListScreen() {
         <summary className={styles.summary}>
           <div className={styles.summaryLeft}>
             <span className={styles.summaryTitle}>Resumo do caso</span>
-            <span className={styles.summaryText}>Informações gerais do acompanhamento</span>
+            <span className={styles.summaryText}>
+              {hasCarePlan ? carePlan?.assessment?.affectedSegment ?? "Informações gerais do acompanhamento" : "Sem plano ativo"}
+            </span>
           </div>
           <ChevronDown size={18} className={styles.chev} />
         </summary>
         <div className={styles.disclosureBody}>
           <p className={styles.disclosureP}>
-            Esta rotina foi selecionada para apoiar mobilidade e força do membro superior. Siga a frequência
-            recomendada e registre suas práticas.
+            {hasCarePlan
+              ? `Plano prescrito por ${carePlan?.professional?.name ?? "profissional de saúde"}.`
+              : "Este exercício aparece como demonstração inicial e não substitui avaliação profissional."}
           </p>
         </div>
       </details>
 
-      <section className={styles.section} aria-label="Rotina da manhã">
+      <section className={styles.section} aria-label={hasCarePlan ? "Rotina da manhã" : "Exercício disponível"}>
         <div className={styles.sectionHeader}>
           <div className={styles.sectionTitleRow}>
             <span className={styles.sectionIcon} aria-hidden="true">
-              ☀
+              {hasCarePlan ? "M" : "D"}
             </span>
-            <h3 className={styles.sectionTitle}>Manhã</h3>
+            <h3 className={styles.sectionTitle}>{firstPrescription?.periodLabel ?? "Demonstração"}</h3>
           </div>
           <ChevronDown size={18} className={styles.sectionChev} />
         </div>
 
-        <div className={styles.exerciseCard}>
-          <h4 className={styles.exerciseName}>{exercise?.name ?? "Deslizamento de toalha"}</h4>
-          <p className={styles.exerciseMeta}>
-            {(exercise?.levelLabel ?? "Leve") + " • " + (exercise?.durLabel ?? "2–3 min") + " • " + (exercise?.repsLabel ?? "1 série")}
-          </p>
+        {exercise ? (
+          <div className={styles.exerciseCard}>
+            <h4 className={styles.exerciseName}>{exercise.name}</h4>
+            <p className={styles.exerciseMeta}>
+              {(exercise.levelLabel ?? "Leve") + " - " + exercise.durLabel + " - " + exercise.repsLabel}
+            </p>
 
-          <button
-            type="button"
-            className={styles.startButton}
-            onClick={() => navigate("/app/exercises/towel-slide/intro")}
-          >
-            COMEÇAR
-          </button>
-        </div>
+            <button
+              type="button"
+              className={styles.startButton}
+              onClick={() => navigate(`/app/exercises/${exercise.id}/intro`)}
+            >
+              COMEÇAR
+            </button>
+          </div>
+        ) : null}
       </section>
     </div>
   );
