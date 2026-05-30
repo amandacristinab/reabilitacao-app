@@ -3,7 +3,8 @@
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: 8px;
-  padding: 10px 14px;
+  min-height: 88px;
+  padding: calc(10px + env(safe-area-inset-top)) 14px 10px;
 }
 
 .logo {
@@ -15,11 +16,11 @@
 }
 
 .iconButton {
-  width: 44px;
-  height: 44px;
-  border-radius: 999px;
-  border: none;
-  background: rgba(45, 212, 191, 0.18);
+  width: var(--touch-target);
+  height: var(--touch-target);
+  border-radius: var(--radius-round);
+  border: 0;
+  background: var(--color-light-turquoise);
   color: var(--color-text);
   display: inline-flex;
   align-items: center;

@@ -7,13 +7,13 @@
 }
 
 .container {
-  width: min(420px, 100%);
+  width: min(var(--auth-shell-max), 100%);
   min-height: 100dvh;
-  padding: calc(clamp(14px, 4dvh, 22px) + env(safe-area-inset-top)) 22px
-    calc(clamp(10px, 3dvh, 18px) + env(safe-area-inset-bottom));
+  padding: calc(30px + env(safe-area-inset-top)) var(--auth-screen-padding)
+    calc(24px + env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
-  gap: clamp(10px, 2.4dvh, 18px);
+  gap: 22px;
 }
 
 .statusBar {
@@ -37,7 +37,7 @@
 }
 
 .logo {
-  width: clamp(110px, 28vw, 138px);
+  width: var(--auth-logo-width);
   height: auto;
   display: block;
   margin: 0 auto;
@@ -45,8 +45,8 @@
 
 .helpButton {
   justify-self: end;
-  width: clamp(36px, 9vw, 42px);
-  height: clamp(36px, 9vw, 42px);
+  width: var(--auth-header-action);
+  height: var(--auth-header-action);
   border-radius: 999px;
   border: 2px solid rgba(148, 163, 184, 0.45);
   background: transparent;
@@ -68,14 +68,15 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: clamp(12px, 2.6dvh, 18px);
+  gap: 24px;
+  align-items: center;
 }
 
 .character {
   width: auto;
   height: auto;
-  max-width: min(86%, 280px);
-  max-height: clamp(180px, 38dvh, 320px);
+  max-width: min(100%, 310px);
+  max-height: min(38dvh, 320px);
   object-fit: contain;
   margin: 0 auto;
   display: block;
@@ -86,12 +87,14 @@
 .copy {
   text-align: center;
   line-height: 1.35;
+  width: 100%;
+  max-width: var(--auth-content-max);
 }
 
 .line {
   margin: 0;
   color: rgba(30, 41, 59, 0.72);
-  font-size: clamp(13px, 3.2vw, 14px);
+  font-size: 18px;
 }
 
 .line strong {
@@ -99,10 +102,12 @@
 }
 
 .actions {
+  width: 100%;
+  max-width: var(--auth-content-max);
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin-top: clamp(6px, 1.2dvh, 10px);
+  margin-top: 4px;
 }
 
 .footer {
@@ -122,7 +127,22 @@
 }
 
 @media (max-height: 640px) {
+  .container {
+    padding-top: calc(22px + env(safe-area-inset-top));
+    padding-bottom: calc(18px + env(safe-area-inset-bottom));
+    gap: 16px;
+  }
+
   .main {
     justify-content: flex-start;
+    gap: 16px;
+  }
+
+  .character {
+    max-height: 230px;
+  }
+
+  .line {
+    font-size: 16px;
   }
 }

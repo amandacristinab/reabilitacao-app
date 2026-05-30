@@ -1,25 +1,27 @@
 .base {
   width: 100%;
+  max-width: var(--layout-content-max);
   min-height: var(--touch-target);
   border-radius: var(--radius-md);
-  font-weight: 900;
+  border: 0;
+  font-family: var(--font-body);
+  font-weight: 700;
   font-size: 16px;
-  letter-spacing: 0.3px;
+  letter-spacing: 0;
   cursor: pointer;
   display: inline-flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
-  padding: 16px 18px;
+  padding: 16px;
   transition: transform 120ms ease, filter 120ms ease, background-color 120ms ease;
   user-select: none;
 }
 
 @media (min-width: 720px) {
   .base {
-    min-height: 52px;
+    min-height: 56px;
     font-size: 17px;
-    padding: 18px 20px;
   }
 }
 
@@ -28,9 +30,8 @@
 }
 
 .primary {
-  background: var(--color-primary);
+  background: radial-gradient(50% 50% at 50% 50%, #57ebd2 49%, var(--color-turquoise) 100%);
   color: var(--color-text);
-  border: none;
 }
 
 .primary:hover {
@@ -38,15 +39,16 @@
 }
 
 .outline {
-  background: transparent;
+  background: var(--color-light-turquoise);
   color: var(--color-text);
-  border: 2px solid var(--color-primary);
+  border: 3px solid var(--color-turquoise);
 }
 
 .disabled {
-  background: #cbd5e1;
-  color: var(--color-muted);
-  border-color: #cbd5e1;
+  background: var(--color-gray);
+  color: var(--color-white);
+  border-color: var(--color-gray);
   cursor: not-allowed;
   transform: none;
+  filter: none;
 }

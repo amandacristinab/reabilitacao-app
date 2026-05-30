@@ -4,9 +4,9 @@
   left: 12px;
   width: var(--touch-target);
   height: var(--touch-target);
-  border-radius: 999px;
-  border: none;
-  background: rgba(0, 0, 0, 0.06);
+  border-radius: var(--radius-round);
+  border: 0;
+  background: var(--color-light-turquoise);
   color: var(--color-text);
   display: inline-flex;
   align-items: center;

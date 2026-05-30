@@ -24,16 +24,15 @@ export function BottomNav({ items, activeId }) {
         const Icon = ICONS[item.id];
         const isActive = activeId === item.id;
         return (
-          <NavLink key={item.id} className={styles.item} to={item.to}>
-            <Icon
-              size={24}
-              strokeWidth={isActive ? 2.5 : 2}
-              color={isActive ? "var(--color-primary)" : "var(--color-muted)"}
-            />
-            <span
-              className={styles.label}
-              style={{ color: isActive ? "var(--color-primary)" : "var(--color-muted)" }}
-            >
+          <NavLink
+            key={item.id}
+            className={({ isActive: routeActive }) =>
+              [styles.item, isActive || routeActive ? styles.active : ""].filter(Boolean).join(" ")
+            }
+            to={item.to}
+          >
+            <Icon size={24} strokeWidth={isActive ? 2.5 : 2} aria-hidden="true" />
+            <span className={styles.label}>
               {LABELS[item.id] ?? item.id}
             </span>
           </NavLink>
