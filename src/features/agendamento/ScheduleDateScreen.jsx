@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { BackButton } from "../../shared/ui/BackButton";
+import { ScreenHeader } from "../../shared/ui/ScreenHeader";
 import styles from "./ScheduleDateScreen.module.css";
 
 export function ScheduleDateScreen() {
@@ -8,7 +8,7 @@ export function ScheduleDateScreen() {
 
   return (
     <div className={styles.page}>
-      <BackButton onClick={() => navigate(-1)} />
+      <ScreenHeader ariaLabel="Agendamento" onBack={() => navigate(-1)} variant="authLike" />
       <div className={styles.body}>
         <h2 className={styles.title}>Escolher data</h2>
         <p className={styles.sub}>Em breve</p>

@@ -4,11 +4,12 @@
   color: var(--color-text);
   display: flex;
   flex-direction: column;
-  padding: 0 18px 28px;
+  padding: calc(30px + env(safe-area-inset-top)) var(--layout-screen-padding)
+    calc(28px + env(safe-area-inset-bottom));
 }
 
 .body {
-  padding-top: 40px;
+  padding-top: 34px;
   max-width: 520px;
 }
 
@@ -24,3 +25,12 @@
   font-size: 14px;
 }
 
+@media (max-width: 359px), (max-height: 700px) {
+  .page {
+    padding-top: calc(22px + env(safe-area-inset-top));
+  }
+
+  .body {
+    padding-top: 22px;
+  }
+}

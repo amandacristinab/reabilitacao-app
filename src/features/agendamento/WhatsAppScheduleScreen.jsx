@@ -17,11 +17,10 @@ export function WhatsAppScheduleScreen() {
 
   return (
     <div className={styles.page}>
-      <ScreenHeader ariaLabel="Agendamento" />
+      <ScreenHeader ariaLabel="Agendamento" variant="authLike" />
 
       <main className={styles.main}>
         <div className={styles.illustrationWrap} aria-hidden="true">
-          <div className={styles.illustrationBg} />
           <img src={triagemImage} alt="" className={styles.illustration} />
         </div>
 
@@ -63,7 +62,12 @@ export function WhatsAppScheduleScreen() {
           <p className={styles.hint}>A chamada será realizada no WhatsApp</p>
 
           <div className={styles.ctaWrap}>
-            <Button type="button" disabled={!isValid} onClick={() => navigate("/app/agendamento/data")}>
+            <Button
+              type="button"
+              className={styles.cta}
+              disabled={!isValid}
+              onClick={() => navigate("/app/agendamento/data")}
+            >
               ESCOLHER DATA
             </Button>
           </div>

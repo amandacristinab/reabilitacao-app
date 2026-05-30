@@ -61,6 +61,10 @@ export function TriageQuestionsScreen() {
     const current = Math.min(totalSteps, Math.max(1, stepIndex + 1));
     return `Etapa ${current} de ${totalSteps}`;
   }, [stepIndex, totalSteps]);
+  const progressPercentage = useMemo(() => {
+    const current = Math.min(totalSteps, Math.max(1, stepIndex + 1));
+    return (current / totalSteps) * 100;
+  }, [stepIndex, totalSteps]);
 
   function setAnswer(questionId, value) {
     setAnswers((prev) => {
@@ -109,13 +113,24 @@ export function TriageQuestionsScreen() {
 
   return (
     <div className={styles.page}>
-      <ScreenHeader ariaLabel="Triagem" onBack={goBack} />
+      <ScreenHeader ariaLabel="Triagem" onBack={goBack} variant="authLike" />
 
       <main className={styles.main}>
         <section className={styles.card} aria-label="Pergunta">
           <div className={styles.questionRow}>
             <img src={character} alt="" className={styles.character} aria-hidden="true" />
             <h2 className={styles.question}>{question?.text ?? "Triagem"}</h2>
+          </div>
+
+          <div
+            className={styles.progressTrack}
+            role="progressbar"
+            aria-label="Progresso da triagem"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow={progressPercentage}
+          >
+            <div className={styles.progressFill} style={{ width: `${progressPercentage}%` }} />
           </div>
 
           <p className={styles.progress} aria-label="Progresso">

@@ -101,8 +101,8 @@ export function DashboardScreen() {
         cardAria: "Agendar avaliação",
         primaryButton: "AGENDAR AVALIAÇÃO",
         primaryAria: "Agendar avaliação",
-        cardTarget: "/app/agendamento/whatsapp",
-        primaryTarget: "/app/agendamento/whatsapp",
+        cardTarget: "/app/triagem",
+        primaryTarget: "/app/triagem",
         primaryIcon: <Stethoscope size={28} />,
       };
     }
@@ -186,7 +186,7 @@ export function DashboardScreen() {
   }, [exerciseHistory]);
 
   const orthosisDelivery = carePlan?.lastOrthosis?.deliveryDate ? formatDate(carePlan.lastOrthosis.deliveryDate) : "";
-  const assessmentTarget = isAssessmentInProgress ? "/app/agendamento/whatsapp" : "/app/triagem";
+  const assessmentTarget = "/app/triagem";
   const primaryTarget = hasCarePlan ? dashboardCopy.primaryTarget : "/app/exercises/towel-slide/intro";
   const primaryAria = hasCarePlan ? dashboardCopy.primaryAria : "Fazer um exercício";
   const primaryButton = hasCarePlan ? dashboardCopy.primaryButton : "FAZER UM EXERCÍCIO";

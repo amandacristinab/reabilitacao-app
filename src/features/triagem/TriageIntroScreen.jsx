@@ -3,18 +3,23 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "../../shared/ui/Button";
 import { ScreenHeader } from "../../shared/ui/ScreenHeader";
 import triagemImage from "../../../assets/triagem 1.png";
+import { clearTriageAnswers } from "./triageStorage";
 import styles from "./TriageIntroScreen.module.css";
 
 export function TriageIntroScreen() {
   const navigate = useNavigate();
 
+  function startTriage() {
+    clearTriageAnswers();
+    navigate("/app/triagem/perguntas");
+  }
+
   return (
     <div className={styles.page}>
-      <ScreenHeader ariaLabel="Triagem" />
+      <ScreenHeader ariaLabel="Triagem" variant="authLike" />
 
       <main className={styles.main}>
         <div className={styles.illustrationWrap} aria-hidden="true">
-          <div className={styles.illustrationBg} />
           <img src={triagemImage} alt="" className={styles.illustration} />
         </div>
 
@@ -26,7 +31,11 @@ export function TriageIntroScreen() {
         </section>
 
         <div className={styles.actions}>
-          <Button onClick={() => navigate("/app/triagem/perguntas")}>VAMOS COMEÇAR</Button>
+          <Button className={styles.cta} onClick={startTriage}>
+            VAMOS COMEÇAR
+          </Button>
+
+          <p className={styles.duration}>Rapidinho: menos de 5 minutos</p>
 
           <button type="button" className={styles.link} onClick={() => navigate("/app/agendamento/whatsapp")}>
             Pular triagem e agendar

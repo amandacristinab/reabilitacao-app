@@ -2,71 +2,91 @@
   min-height: 100dvh;
   background: var(--color-surface);
   color: var(--color-text);
-  padding: calc(18px + env(safe-area-inset-top)) 18px calc(18px + env(safe-area-inset-bottom));
+  padding: calc(30px + env(safe-area-inset-top)) var(--layout-screen-padding)
+    calc(18px + env(safe-area-inset-bottom));
   position: relative;
 }
 
 .main {
   display: grid;
   justify-items: center;
-  padding-top: 10px;
+  padding-top: 40px;
+  width: 100%;
+  min-width: 0;
 }
 
 .card {
-  background: var(--color-card);
-  border-radius: 22px;
-  border: 1px solid rgba(148, 163, 184, 0.5);
-  padding: 18px 16px 16px;
-  width: min(92vw, 420px);
-  box-shadow: 0 16px 34px rgba(2, 6, 23, 0.08);
+  width: 100%;
+  max-width: var(--auth-content-max);
+  min-width: 0;
 }
 
 .questionRow {
   display: grid;
-  grid-template-columns: 74px 1fr;
-  gap: 12px;
+  grid-template-columns: 84px 1fr;
+  gap: 16px;
   align-items: center;
 }
 
 .character {
-  width: 74px;
-  height: 74px;
-  border-radius: 18px;
-  object-fit: cover;
-  background: rgba(226, 232, 240, 0.45);
+  width: 84px;
+  height: 84px;
+  object-fit: contain;
 }
 
 .question {
   margin: 0;
-  font-size: 17px;
-  font-weight: 950;
+  font-size: 21px;
+  font-weight: 900;
   color: var(--color-text);
-  line-height: 1.2;
+  line-height: 1.42;
+}
+
+.progressTrack {
+  width: 100%;
+  height: 26px;
+  margin-top: 14px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(156, 163, 175, 0.48);
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-turquoise);
+  transition: width 180ms ease;
 }
 
 .progress {
-  margin: 10px 0 12px;
+  margin: 14px 0 22px;
   text-align: center;
-  font-size: 12px;
-  font-weight: 800;
-  color: rgba(30, 41, 59, 0.7);
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--color-text);
 }
 
 .options {
   display: grid;
-  gap: 10px;
+  gap: 14px;
+  min-width: 0;
 }
 
 .option {
   width: 100%;
+  min-height: 82px;
   text-align: center;
-  padding: 14px 14px;
-  border-radius: 14px;
-  border: 2px solid rgba(45, 212, 191, 0.55);
-  background: rgba(255, 255, 255, 0.9);
+  padding: 16px 14px;
+  border-radius: 16px;
+  border: 3px solid rgba(59, 183, 162, 0.98);
+  background: var(--color-light-turquoise);
   color: rgba(15, 23, 42, 0.9);
   font-weight: 900;
+  font-size: 20px;
+  line-height: 1.2;
   cursor: pointer;
+  overflow-wrap: anywhere;
+  box-shadow: 0 2px 5px rgba(15, 23, 42, 0.08);
 }
 
 .option:active {
@@ -79,10 +99,60 @@
 }
 
 .footer {
-  margin-top: 14px;
+  margin-top: 16px;
 }
 
 .continue {
   width: 100%;
+  min-height: 78px;
+  font-size: 18px;
+  font-weight: 900;
 }
 
+@media (max-width: 359px), (max-height: 700px) {
+  .page {
+    padding-top: calc(22px + env(safe-area-inset-top));
+  }
+
+  .main {
+    padding-top: 22px;
+  }
+
+  .questionRow {
+    grid-template-columns: 70px 1fr;
+    gap: 12px;
+  }
+
+  .character {
+    width: 70px;
+    height: 70px;
+  }
+
+  .question {
+    font-size: 18px;
+    line-height: 1.3;
+  }
+
+  .progressTrack {
+    height: 22px;
+    margin-top: 12px;
+  }
+
+  .progress {
+    margin: 12px 0 16px;
+    font-size: 14px;
+  }
+
+  .options {
+    gap: 10px;
+  }
+
+  .option {
+    min-height: 68px;
+    font-size: 18px;
+  }
+
+  .continue {
+    min-height: 64px;
+  }
+}

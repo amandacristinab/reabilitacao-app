@@ -104,6 +104,22 @@ test("dashboard shows assessment accordion and towel exercise for a new patient 
   expect(screen.queryByText("PLANO DE CUIDADOS ATIVO")).not.toBeInTheDocument();
   expect(screen.queryByText("Rotina prescrita")).not.toBeInTheDocument();
 
+  await userEvent.click(screen.getByRole("button", { name: /AGENDAR AVALIA/i }));
+  expect(screen.getByRole("heading", { name: /Fernanda/i })).toBeInTheDocument();
+});
+
+test("dashboard sends assessment in progress users back to triage intro", async () => {
+  window.localStorage.setItem("neuroviva.triage.v1", JSON.stringify({ stroke_count: "1" }));
+
+  renderApp(["/app/dashboard"], { activePatientId: NEW_PATIENT_ID });
+
+  await userEvent.click(screen.getByRole("button", { name: /AGENDAR AVALIA/i }));
+  expect(screen.getByRole("heading", { name: /Fernanda/i })).toBeInTheDocument();
+});
+
+test("dashboard accordion toggles and towel exercise opens for a new patient", async () => {
+  renderApp(["/app/dashboard"], { activePatientId: NEW_PATIENT_ID });
+
   await userEvent.click(screen.getByRole("button", { name: /Recolher avalia/i }));
   expect(screen.queryByText(/Libere treinos personalizados/i)).not.toBeInTheDocument();
   expect(screen.getByRole("button", { name: /Expandir avalia/i })).toBeInTheDocument();
@@ -246,14 +262,34 @@ test("changing target series updates completion flow", async () => {
 });
 
 test("triage flow shows questions and requires selection to continue", async () => {
+  window.localStorage.setItem(
+    "neuroviva.triage.v1",
+    JSON.stringify({
+      stroke_count: "1",
+      last_stroke_when: "Até 3 meses",
+      stroke_type: "Isquêmico",
+      brain_side: "Direito",
+      body_side_most_affected: "Esquerdo",
+      caregiver: "Não",
+      rehab_with_professional: "Sim",
+      rehab_professionals: ["Fisioterapeuta"],
+    }),
+  );
+
   renderApp(["/app/triagem"]);
 
   expect(screen.queryByRole("navigation", { name: /Navega..o principal/i })).not.toBeInTheDocument();
+  expect(screen.getByRole("banner", { name: "Triagem" })).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Voltar" })).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Ajuda" })).toBeInTheDocument();
+  expect(screen.getByRole("img", { name: /neuroviva/i })).toBeInTheDocument();
 
   await userEvent.click(screen.getByRole("button", { name: /VAMOS COME/i }));
 
+  expect(window.localStorage.getItem("neuroviva.triage.v1")).toBeNull();
   expect(screen.getByRole("heading", { name: /Quantos AVCs/i })).toBeInTheDocument();
   expect(screen.getByText(/Etapa 1 de 8/i)).toBeInTheDocument();
+  expect(screen.getByRole("progressbar", { name: /Progresso da triagem/i })).toHaveAttribute("aria-valuenow", "12.5");
 
   const continuar = screen.getByRole("button", { name: /CONTINUAR/i });
   expect(continuar).toBeDisabled();
@@ -264,4 +300,34 @@ test("triage flow shows questions and requires selection to continue", async () 
   await userEvent.click(continuar);
   expect(screen.getByRole("heading", { name: /Quando foi o .ltimo AVC/i })).toBeInTheDocument();
   expect(screen.getByText(/Etapa 2 de 8/i)).toBeInTheDocument();
+  expect(screen.getByRole("progressbar", { name: /Progresso da triagem/i })).toHaveAttribute("aria-valuenow", "25");
+});
+
+test("triage intro skip link goes directly to scheduling", async () => {
+  renderApp(["/app/triagem"]);
+
+  await userEvent.click(screen.getByRole("button", { name: /Pular triagem e agendar/i }));
+
+  expect(screen.getByRole("banner", { name: "Agendamento" })).toBeInTheDocument();
+  expect(screen.getByRole("heading", { name: /Agendar teleatendimento/i })).toBeInTheDocument();
+});
+
+test("whatsapp schedule uses the shared header and navigates to date selection", async () => {
+  renderApp(["/app/agendamento/whatsapp"]);
+
+  expect(screen.getByRole("banner", { name: "Agendamento" })).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Voltar" })).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Ajuda" })).toBeInTheDocument();
+  expect(screen.queryByRole("navigation", { name: /Navega..o principal/i })).not.toBeInTheDocument();
+
+  const chooseDate = screen.getByRole("button", { name: /ESCOLHER DATA/i });
+  expect(chooseDate).toBeDisabled();
+
+  await userEvent.type(screen.getByLabelText(/N.mero de WhatsApp/i), "11999232324");
+  expect(chooseDate).toBeEnabled();
+
+  await userEvent.click(chooseDate);
+  expect(screen.getByRole("banner", { name: "Agendamento" })).toBeInTheDocument();
+  expect(screen.getByRole("heading", { name: /Escolher data/i })).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Ajuda" })).toBeInTheDocument();
 });

@@ -20,3 +20,11 @@ export function saveTriageAnswers(answers) {
   }
 }
 
+export function clearTriageAnswers() {
+  try {
+    window.localStorage.removeItem(STORAGE_KEY);
+  } catch {
+    // ignore write errors (private mode / quota)
+  }
+}
+
