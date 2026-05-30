@@ -48,9 +48,9 @@
   width: var(--auth-header-action);
   height: var(--auth-header-action);
   border-radius: 999px;
-  border: 2px solid rgba(148, 163, 184, 0.45);
+  border: 0;
   background: transparent;
-  color: rgba(30, 41, 59, 0.75);
+  color: var(--color-text);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -75,8 +75,8 @@
 .character {
   width: auto;
   height: auto;
-  max-width: min(100%, 310px);
-  max-height: min(38dvh, 320px);
+  max-width: min(86%, 240px);
+  max-height: min(32dvh, 280px);
   object-fit: contain;
   margin: 0 auto;
   display: block;
@@ -110,16 +110,26 @@
   margin-top: 4px;
 }
 
+.authButton {
+  min-height: 80px;
+  font-size: 17px;
+  font-weight: 900;
+}
+
 .footer {
   margin-top: auto;
   display: flex;
   justify-content: flex-end;
-  padding-top: 12px;
+  align-items: center;
+  min-height: 80px;
+  margin-right: calc(-1 * var(--auth-screen-padding));
+  margin-left: calc(-1 * var(--auth-screen-padding));
+  padding: 0 var(--auth-screen-padding);
 }
 
 .limbse {
-  width: auto;
-  height: 50px;
+  width: 100px;
+  height: 33px;
   object-fit: contain;
   display: block;
   user-select: none;
@@ -139,10 +149,14 @@
   }
 
   .character {
-    max-height: 230px;
+    max-height: 210px;
   }
 
   .line {
     font-size: 16px;
+  }
+
+  .authButton {
+    min-height: 64px;
   }
 }
