@@ -90,27 +90,80 @@
   -webkit-user-drag: none;
 }
 
-@media (max-height: 640px) {
+@media (max-height: 700px) {
   .container {
-    padding-top: calc(22px + env(safe-area-inset-top));
-    padding-bottom: calc(18px + env(safe-area-inset-bottom));
-    gap: 16px;
+    padding-top: calc(18px + env(safe-area-inset-top));
+    padding-bottom: calc(14px + env(safe-area-inset-bottom));
+    gap: 10px;
   }
 
   .main {
     justify-content: flex-start;
-    gap: 16px;
+    gap: 14px;
   }
 
   .character {
-    max-height: 210px;
+    max-height: min(28dvh, 188px);
   }
 
   .line {
     font-size: 16px;
   }
 
+  .actions {
+    gap: 10px;
+    margin-top: 2px;
+  }
+
   .authButton {
     min-height: 64px;
+  }
+
+  .footer {
+    min-height: 42px;
+  }
+
+  .limbse {
+    width: 92px;
+    height: auto;
+  }
+}
+
+@media (max-height: 640px) {
+  .container {
+    padding-top: calc(12px + env(safe-area-inset-top));
+    padding-bottom: calc(10px + env(safe-area-inset-bottom));
+    gap: 8px;
+  }
+
+  .main {
+    gap: 10px;
+  }
+
+  .character {
+    max-height: min(26dvh, 166px);
+  }
+
+  .copy {
+    line-height: 1.25;
+  }
+
+  .actions {
+    gap: 8px;
+    margin-top: 0;
+  }
+
+  .authButton {
+    min-height: 56px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .footer {
+    min-height: 34px;
+  }
+
+  .limbse {
+    width: 86px;
   }
 }
