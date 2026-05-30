@@ -1,8 +1,9 @@
 .page {
   position: relative;
-  padding: calc(clamp(14px, 4dvh, 22px) + env(safe-area-inset-top)) 22px 22px;
+  min-height: 100%;
+  padding: calc(30px + env(safe-area-inset-top)) var(--layout-screen-padding)
+    calc(var(--bottom-nav-height) + env(safe-area-inset-bottom));
   background: var(--color-surface);
-  padding-bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom));
 }
 
 .hero {
@@ -10,7 +11,21 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+  min-height: 118px;
+  margin-top: 34px;
   margin-bottom: 16px;
+}
+
+@media (max-width: 359px), (max-height: 700px) {
+  .page {
+    padding-top: calc(22px + env(safe-area-inset-top));
+  }
+
+  .hero {
+    min-height: 96px;
+    margin-top: 22px;
+    margin-bottom: 14px;
+  }
 }
 
 .character {

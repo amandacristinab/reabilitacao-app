@@ -20,7 +20,7 @@ export function ExerciseListScreen() {
 
   return (
     <div className={styles.page}>
-      <ScreenHeader ariaLabel="Cabeçalho de exercícios" />
+      <ScreenHeader ariaLabel="Cabeçalho de exercícios" variant="authLike" />
 
       <section className={styles.hero} aria-label="Resumo de exercícios">
         <div className={styles.heroText}>

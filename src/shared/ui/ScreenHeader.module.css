@@ -7,12 +7,22 @@
   padding: calc(10px + env(safe-area-inset-top)) 14px 10px;
 }
 
+.authLike {
+  gap: 0;
+  min-height: var(--auth-header-action);
+  padding: 0;
+}
+
 .logo {
   width: clamp(110px, 28vw, 138px);
   height: auto;
   object-fit: contain;
   display: block;
   margin: 0 auto;
+}
+
+.authLikeLogo {
+  width: min(var(--auth-logo-width), 45vw);
 }
 
 .iconButton {
@@ -28,12 +38,16 @@
   cursor: pointer;
 }
 
-.iconButton:first-of-type {
-  justify-self: start;
+.authLikeBackButton {
+  width: var(--auth-header-action);
+  height: var(--auth-header-action);
+  border-radius: 999px;
+  background: #43c7b7;
+  box-shadow: 0 3px 8px rgba(15, 23, 42, 0.18);
 }
 
-.iconButton:last-of-type {
-  justify-self: end;
+.iconButton:first-of-type {
+  justify-self: start;
 }
 
 .iconButton:active {

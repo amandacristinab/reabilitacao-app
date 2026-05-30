@@ -3,7 +3,7 @@ import { LogOut, ShieldCheck, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useSession } from "../../app/state/session";
 import { getDefaultPatient, getPatientById } from "../../shared/data/mockData";
-import { BackButton } from "../../shared/ui/BackButton";
+import { ScreenHeader } from "../../shared/ui/ScreenHeader";
 import styles from "./ProfileScreen.module.css";
 
 export function ProfileScreen() {
@@ -14,7 +14,7 @@ export function ProfileScreen() {
 
   return (
     <div className={styles.page}>
-      <BackButton onClick={() => navigate(-1)} />
+      <ScreenHeader ariaLabel="Cabeçalho do perfil" onBack={() => navigate(-1)} variant="authLike" />
       <div className={styles.header}>
         <div className={styles.avatar}>
           <User size={50} />

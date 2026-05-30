@@ -1,12 +1,13 @@
 .page {
   position: relative;
-  padding: calc(24px + env(safe-area-inset-top)) 24px calc(24px + var(--bottom-nav-height) + env(safe-area-inset-bottom));
+  padding: calc(30px + env(safe-area-inset-top)) var(--layout-screen-padding)
+    calc(24px + var(--bottom-nav-height) + env(safe-area-inset-bottom));
   background: var(--color-surface);
   min-height: 100dvh;
 }
 
 .header {
-  margin-top: 40px;
+  margin-top: 34px;
   margin-bottom: 16px;
 }
 
@@ -54,5 +55,15 @@
   margin-top: 18px;
   display: grid;
   gap: 10px;
+}
+
+@media (max-width: 359px), (max-height: 700px) {
+  .page {
+    padding-top: calc(22px + env(safe-area-inset-top));
+  }
+
+  .header {
+    margin-top: 22px;
+  }
 }
 

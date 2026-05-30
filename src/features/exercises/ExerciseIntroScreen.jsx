@@ -30,7 +30,7 @@ export function ExerciseIntroScreen() {
   if (!exercise) {
     return (
       <div className={styles.page}>
-        <ScreenHeader ariaLabel="Cabeçalho do exercício" />
+        <ScreenHeader ariaLabel="Cabeçalho do exercício" variant="authLike" />
         <main className={styles.main}>
           <h1 className={styles.title}>Exercício</h1>
           <p className={styles.subtitle}>Exercício não encontrado.</p>
@@ -45,7 +45,7 @@ export function ExerciseIntroScreen() {
 
   return (
     <div className={styles.page}>
-      <ScreenHeader ariaLabel="Cabeçalho do exercício" />
+      <ScreenHeader ariaLabel="Cabeçalho do exercício" variant="authLike" />
       <main className={styles.main}>
         <h1 className={styles.title}>{exercise.name}</h1>
 

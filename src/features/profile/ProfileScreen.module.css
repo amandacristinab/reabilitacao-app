@@ -1,11 +1,12 @@
 .page {
   position: relative;
-  padding: calc(24px + env(safe-area-inset-top)) 24px 24px;
+  min-height: 100%;
+  padding: calc(30px + env(safe-area-inset-top)) var(--layout-screen-padding) 24px;
   background: var(--color-surface);
 }
 
 .header {
-  margin-top: 40px;
+  margin-top: 34px;
   text-align: center;
 }
 
@@ -54,3 +55,12 @@
   text-align: left;
 }
 
+@media (max-width: 359px), (max-height: 700px) {
+  .page {
+    padding-top: calc(22px + env(safe-area-inset-top));
+  }
+
+  .header {
+    margin-top: 22px;
+  }
+}

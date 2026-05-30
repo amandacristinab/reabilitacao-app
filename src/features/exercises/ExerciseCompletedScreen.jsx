@@ -2,8 +2,8 @@ import React, { useMemo } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useActivity } from "../../app/state/activity";
 import { useSession } from "../../app/state/session";
-import { BackButton } from "../../shared/ui/BackButton";
 import { Button } from "../../shared/ui/Button";
+import { ScreenHeader } from "../../shared/ui/ScreenHeader";
 import { findExerciseById } from "./data/exercises";
 import styles from "./ExerciseCompletedScreen.module.css";
 
@@ -34,7 +34,11 @@ export function ExerciseCompletedScreen() {
 
   return (
     <div className={styles.page}>
-      <BackButton onClick={() => navigate("/app/exercises", { replace: true })} />
+      <ScreenHeader
+        ariaLabel="Cabeçalho de conclusão do exercício"
+        onBack={() => navigate("/app/exercises", { replace: true })}
+        variant="authLike"
+      />
       <header className={styles.header} aria-label="Conclusão do exercício">
         <h2 className={styles.title}>Concluído</h2>
         <p className={styles.sub}>{exercise?.name ?? "Exercício"}</p>

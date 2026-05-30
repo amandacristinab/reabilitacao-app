@@ -94,14 +94,22 @@ test("dashboard uses default patient data and opens the prescribed exercise list
   expect(screen.getByRole("heading", { name: /Deslizamento de toalha/i })).toBeInTheDocument();
 });
 
-test("dashboard shows triage call to action for a new patient without triage", () => {
+test("dashboard shows assessment accordion and towel exercise for a new patient without triage", async () => {
   renderApp(["/app/dashboard"], { activePatientId: NEW_PATIENT_ID });
 
   expect(screen.getByText("Oi, Novo paciente!")).toBeInTheDocument();
   expect(screen.getByText(/AVALIA..O GRATUITA/i)).toBeInTheDocument();
-  expect(screen.getAllByRole("button", { name: /AGENDAR AVALIA..O/i })).toHaveLength(2);
+  expect(screen.getAllByRole("button", { name: /AGENDAR AVALIA/i })).toHaveLength(1);
+  expect(screen.getByRole("button", { name: /FAZER UM EXERC/i })).toBeInTheDocument();
   expect(screen.queryByText("PLANO DE CUIDADOS ATIVO")).not.toBeInTheDocument();
   expect(screen.queryByText("Rotina prescrita")).not.toBeInTheDocument();
+
+  await userEvent.click(screen.getByRole("button", { name: /Recolher avalia/i }));
+  expect(screen.queryByText(/Libere treinos personalizados/i)).not.toBeInTheDocument();
+  expect(screen.getByRole("button", { name: /Expandir avalia/i })).toBeInTheDocument();
+
+  await userEvent.click(screen.getByRole("button", { name: /FAZER UM EXERC/i }));
+  expect(screen.getByRole("heading", { name: /Deslizamento de toalha/i })).toBeInTheDocument();
 });
 
 test("dashboard shows assessment in progress for a new patient after triage starts", () => {
@@ -109,8 +117,9 @@ test("dashboard shows assessment in progress for a new patient after triage star
 
   renderApp(["/app/dashboard"], { activePatientId: NEW_PATIENT_ID });
 
-  expect(screen.getByText(/AVALIA..O EM ANDAMENTO/i)).toBeInTheDocument();
-  expect(screen.getAllByRole("button", { name: /AGENDAR AVALIA..O/i })).toHaveLength(2);
+  expect(screen.getByText(/AVALIA..O GRATUITA/i)).toBeInTheDocument();
+  expect(screen.getAllByRole("button", { name: /AGENDAR AVALIA/i })).toHaveLength(1);
+  expect(screen.getByRole("button", { name: /FAZER UM EXERC/i })).toBeInTheDocument();
   expect(screen.queryByText("PLANO DE CUIDADOS ATIVO")).not.toBeInTheDocument();
   expect(screen.queryByText("Rotina prescrita")).not.toBeInTheDocument();
 });

@@ -2,17 +2,17 @@
   justify-self: end;
   width: var(--auth-header-action);
   height: var(--auth-header-action);
-  border-radius: 999px;
   border: 0;
+  border-radius: 999px;
   background: transparent;
   color: var(--color-text);
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
   padding: 0;
 }
 
-.button:disabled {
-  opacity: 1;
-  cursor: default;
+.button:active {
+  transform: translateY(1px);
 }

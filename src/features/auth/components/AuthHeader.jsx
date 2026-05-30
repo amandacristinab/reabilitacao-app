@@ -1,6 +1,6 @@
 import React from "react";
 import logo from "../../../../assets/logo.png";
-import { AuthHelpButton } from "./AuthHelpButton";
+import { HeaderHelpButton } from "../../../shared/ui/HeaderHelpButton";
 import styles from "./AuthHeader.module.css";
 
 function BackIcon() {
@@ -32,7 +32,7 @@ export function AuthHeader({ onBack }) {
         <div className={styles.headerSide} aria-hidden="true" />
       )}
       <img src={logo} alt="neuroviva" className={styles.logo} />
-      <AuthHelpButton />
+      <HeaderHelpButton />
     </header>
   );
 }

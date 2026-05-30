@@ -1,10 +1,22 @@
-import React, { useMemo } from "react";
-import { ClipboardList, Clock3, Dumbbell, HelpCircle, LogOut, ShieldCheck, Sparkles, Stethoscope, UserRound } from "lucide-react";
+import React, { useMemo, useState } from "react";
+import {
+  ChevronDown,
+  ChevronUp,
+  ClipboardList,
+  Clock3,
+  Dumbbell,
+  LogOut,
+  ShieldCheck,
+  Sparkles,
+  Stethoscope,
+  UserRound,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useSession } from "../../app/state/session";
 import { getDefaultPatient, getPatientById } from "../../shared/data/mockData";
 import { useExerciseHistory } from "../../shared/hooks/useExerciseHistory";
 import { useSeedMockActivities } from "../../shared/hooks/useSeedMockActivities";
+import { HeaderHelpButton } from "../../shared/ui/HeaderHelpButton";
 import { loadWhatsAppPhoneDigits } from "../agendamento/whatsappPhoneStorage";
 import { loadTriageAnswers } from "../triagem/triageStorage";
 import logo from "../../../assets/logo.png";
@@ -53,6 +65,7 @@ export function DashboardScreen() {
   const navigate = useNavigate();
   const { activePatientId, userName, logout } = useSession();
   const exerciseHistory = useExerciseHistory();
+  const [isAssessmentOpen, setIsAssessmentOpen] = useState(true);
   const patient = getPatientById(activePatientId) ?? getDefaultPatient();
   const carePlan = patient?.carePlan ?? null;
   useSeedMockActivities(patient);
@@ -173,6 +186,11 @@ export function DashboardScreen() {
   }, [exerciseHistory]);
 
   const orthosisDelivery = carePlan?.lastOrthosis?.deliveryDate ? formatDate(carePlan.lastOrthosis.deliveryDate) : "";
+  const assessmentTarget = isAssessmentInProgress ? "/app/agendamento/whatsapp" : "/app/triagem";
+  const primaryTarget = hasCarePlan ? dashboardCopy.primaryTarget : "/app/exercises/towel-slide/intro";
+  const primaryAria = hasCarePlan ? dashboardCopy.primaryAria : "Fazer um exercício";
+  const primaryButton = hasCarePlan ? dashboardCopy.primaryButton : "FAZER UM EXERCÍCIO";
+  const primaryIcon = hasCarePlan ? dashboardCopy.primaryIcon : <Dumbbell size={36} />;
 
   return (
     <div className={styles.page}>
@@ -191,26 +209,71 @@ export function DashboardScreen() {
 
         <img src={logo} alt="neuroviva" className={styles.logo} />
 
-        <button
-          type="button"
-          className={styles.topHelp}
-          onClick={() => window.alert("Ajuda em breve")}
-          aria-label="Ajuda"
-        >
-          <HelpCircle size={50} strokeWidth={2.7} />
-        </button>
+        <HeaderHelpButton />
       </header>
 
       <section className={styles.hero} aria-label="Boas-vindas">
         <div className={styles.heroText}>
           <h2 className={styles.greeting}>Oi, {displayName}!</h2>
-          <p className={styles.prompt}>{dashboardCopy.prompt}</p>
+          <p className={styles.prompt}>{hasCarePlan ? dashboardCopy.prompt : "Vamos praticar?"}</p>
         </div>
         <img src={character} alt="" className={styles.character} />
       </section>
 
       <div className={styles.content}>
         {!hasCarePlan ? (
+          <section
+            className={[styles.assessmentCard, !isAssessmentOpen ? styles.assessmentCardClosed : ""]
+              .filter(Boolean)
+              .join(" ")}
+            aria-label="Avaliação física"
+          >
+            <div className={styles.assessmentHeader}>
+              <h3 className={styles.assessmentTitle}>FAÇA SUA AVALIAÇÃO GRATUITA</h3>
+              <button
+                type="button"
+                className={styles.assessmentToggle}
+                onClick={() => setIsAssessmentOpen((prev) => !prev)}
+                aria-expanded={isAssessmentOpen}
+                aria-label={isAssessmentOpen ? "Recolher avaliação gratuita" : "Expandir avaliação gratuita"}
+              >
+                {isAssessmentOpen ? <ChevronUp size={20} strokeWidth={2.8} /> : <ChevronDown size={20} strokeWidth={2.8} />}
+              </button>
+            </div>
+
+            {isAssessmentOpen ? (
+              <div className={styles.assessmentBody}>
+                <ul className={styles.assessmentList} aria-label="Resumo da jornada">
+                  <li className={styles.assessmentItem}>
+                    <span className={styles.assessmentIcon} aria-hidden="true">
+                      <UserRound size={18} />
+                    </span>
+                    <span>Encontre um profissional da saúde</span>
+                  </li>
+                  <li className={styles.assessmentItem}>
+                    <span className={styles.assessmentIcon} aria-hidden="true">
+                      <ShieldCheck size={18} />
+                    </span>
+                    <span>Faça uma órtese personalizada</span>
+                  </li>
+                </ul>
+
+                <button
+                  type="button"
+                  className={styles.assessmentCta}
+                  onClick={() => navigate(assessmentTarget)}
+                  aria-label="Agendar avaliação"
+                >
+                  AGENDAR AVALIAÇÃO
+                </button>
+
+                <p className={styles.assessmentFooter}>Libere treinos personalizados e acompanhamento profissional</p>
+              </div>
+            ) : null}
+          </section>
+        ) : null}
+
+        {false ? (
           <section className={styles.assessmentCard} aria-label="Avaliação física">
             <div className={styles.assessmentHeader}>
               <h3 className={styles.assessmentTitle}>{dashboardCopy.cardTitle}</h3>
@@ -248,11 +311,11 @@ export function DashboardScreen() {
         <button
           type="button"
           className={styles.primaryCta}
-          onClick={() => navigate(dashboardCopy.primaryTarget)}
-          aria-label={dashboardCopy.primaryAria}
+          onClick={() => navigate(primaryTarget)}
+          aria-label={primaryAria}
         >
-          <div className={styles.ctaIcon}>{dashboardCopy.primaryIcon}</div>
-          <span className={styles.ctaText}>{dashboardCopy.primaryButton}</span>
+          <div className={styles.ctaIcon}>{primaryIcon}</div>
+          <span className={styles.ctaText}>{primaryButton}</span>
         </button>
 
         {showProgress ? (

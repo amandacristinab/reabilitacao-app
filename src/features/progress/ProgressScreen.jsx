@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useSession } from "../../app/state/session";
 import { getDefaultPatient, getPatientById } from "../../shared/data/mockData";
 import { useExerciseHistory } from "../../shared/hooks/useExerciseHistory";
-import { BackButton } from "../../shared/ui/BackButton";
+import { ScreenHeader } from "../../shared/ui/ScreenHeader";
 import styles from "./ProgressScreen.module.css";
 
 export function ProgressScreen() {
@@ -15,7 +15,7 @@ export function ProgressScreen() {
 
   return (
     <div className={styles.page}>
-      <BackButton onClick={() => navigate(-1)} />
+      <ScreenHeader ariaLabel="Cabeçalho de progresso" onBack={() => navigate(-1)} variant="authLike" />
       <header className={styles.header}>
         <h2 className={styles.title}>Progresso</h2>
         <p className={styles.sub}>Meta semanal: {weeklyGoal} treino(s)</p>
