@@ -24,7 +24,7 @@ describe("mockData", () => {
     expect(exercise?.isPrescribed).toBe(true);
     expect(exercise?.durationSeconds).toBe(180);
     expect(exercise?.suggestedRepetitions).toBe(5);
-    expect(exercise?.targetSeries).toBe(1);
+    expect(exercise?.targetSeries).toBe(3);
     expect(exercise?.prescriptions).toHaveLength(3);
   });
 

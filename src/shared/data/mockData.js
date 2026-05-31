@@ -59,7 +59,7 @@ export function getExerciseForPatient(exerciseId, patientId = DEFAULT_PATIENT_ID
     durLabel: prescription?.durationLabel ?? "2-3 min",
     repsLabel: prescription ? `${prescription.series} serie` : "1 serie",
     suggestedRepetitions: prescription?.repetitions ?? 5,
-    targetSeries: prescription?.series ?? 1,
+    targetSeries: prescription?.series ?? 3,
     icon: "toalha",
   };
 }

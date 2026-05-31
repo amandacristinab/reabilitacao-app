@@ -324,7 +324,12 @@ test("completing an exercise saves activity and shows on dashboard", async () =>
     // advance through countdown (4s) — phase transitions to running, timer interval set up
     await act(async () => { vi.advanceTimersByTime(4_500); });
     // advance through exercise (exactly 180 ticks: 180→0)
-    await act(async () => { vi.advanceTimersByTime(180_000); });
+    for (let series = 0; series < 3; series += 1) {
+      await act(async () => { vi.advanceTimersByTime(180_000); });
+      if (series < 2) {
+        await userEvent.click(screen.getByRole("button", { name: "INICIAR" }));
+      }
+    }
 
     expect(window.localStorage.getItem("neuroviva.activities.v1")).toBeTruthy();
 
@@ -363,9 +368,8 @@ test("pausing stops the timer and resuming continues without countdown", async (
     await userEvent.click(screen.getByRole("button", { name: "INICIAR" }));
     expect(screen.getByRole("button", { name: "PAUSAR" })).toBeInTheDocument();
 
-    // complete the exercise (exactly 180 ticks from when timer interval was set up)
-    await act(async () => { vi.advanceTimersByTime(180_000); });
-    expect(window.localStorage.getItem("neuroviva.activities.v1")).toBeTruthy();
+    await act(async () => { vi.advanceTimersByTime(1_000); });
+    expect(screen.getByText("02:59")).toBeInTheDocument();
   } finally {
     vi.useRealTimers();
   }

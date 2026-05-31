@@ -47,7 +47,8 @@ export function saveSession(session) {
 
 export function clearSession() {
   try {
-    window.localStorage.removeItem(SESSION_KEY);
+    const keys = Object.keys(window.localStorage).filter((k) => k.startsWith("neuroviva."));
+    keys.forEach((k) => window.localStorage.removeItem(k));
   } catch {
     // ignore storage errors
   }

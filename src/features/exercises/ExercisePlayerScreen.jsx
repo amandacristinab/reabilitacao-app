@@ -6,8 +6,10 @@ import { useUserMedia } from "../../shared/hooks/useUserMedia";
 import { findExerciseById } from "./data/exercises";
 import { useActivity } from "../../app/state/activity";
 import { getPoseLandmarker } from "./pose/poseLandmarker";
+import { getHandLandmarker } from "./pose/handLandmarker";
 import { evaluateTowelSlidePose } from "./pose/towelSlideRules";
 import { evaluateArmInFramePose } from "./pose/armInFrameRules";
+import { drawPoseLandmarks, clearPoseCanvas } from "./pose/drawPoseLandmarks";
 import { loadExerciseSettings } from "./settings/exerciseSettings";
 import { BackButton } from "../../shared/ui/BackButton";
 import styles from "./ExercisePlayerScreen.module.css";
@@ -36,8 +38,11 @@ export function ExercisePlayerScreen() {
   const [seriesDone, setSeriesDone] = useState(0);
   const [repetitions, setRepetitions] = useState(exercise?.suggestedRepetitions ?? 5);
   const [targetSeries, setTargetSeries] = useState(exercise?.targetSeries ?? 1);
+  const [repsDone, setRepsDone] = useState(0);
 
   const videoRef = useRef(null);
+  const canvasRef = useRef(null);
+  const totalReversalsRef = useRef(0);
   const { status, error, start, stop, streamRef } = useUserMedia();
   const recordedRef = useRef(false);
   const poseStateRef = useRef(null);
@@ -64,28 +69,39 @@ export function ExercisePlayerScreen() {
     setSeriesDone(0);
   }, [durationSeconds, exerciseId]);
 
+  // Reset rep counter on each new series
+  useEffect(() => {
+    if (phase !== "countdown") return;
+    totalReversalsRef.current = 0;
+    setRepsDone(0);
+  }, [phase]);
+
   // Countdown: 3 → 2 → 1 → VAI! → running
   useEffect(() => {
     if (phase !== "countdown") return;
     setCountdownStep(0);
     let step = 0;
+    let startTimer;
     const intervalId = setInterval(() => {
       step += 1;
       if (step < COUNTDOWN.length) setCountdownStep(step);
       if (step >= COUNTDOWN.length - 1) {
         clearInterval(intervalId);
-        setTimeout(() => setPhase("running"), 1000);
+        startTimer = setTimeout(() => setPhase("running"), 1000);
       }
     }, 1000);
-    return () => clearInterval(intervalId);
+    return () => {
+      clearInterval(intervalId);
+      if (startTimer) clearTimeout(startTimer);
+    };
   }, [phase]);
 
   // Exercise timer
   useEffect(() => {
-    if (phase !== "running" || timeLeft <= 0 || isFinished) return;
-    const id = setInterval(() => setTimeLeft((t) => t - 1), 1000);
+    if (phase !== "running" || isFinished) return;
+    const id = setInterval(() => setTimeLeft((t) => Math.max(t - 1, 0)), 1000);
     return () => clearInterval(id);
-  }, [phase, timeLeft, isFinished]);
+  }, [phase, isFinished]);
 
   // Series progression when timer hits 0
   useEffect(() => {
@@ -97,6 +113,17 @@ export function ExercisePlayerScreen() {
       return next;
     });
   }, [timeLeft, exercise, durationSeconds, targetSeries, phase]);
+
+  // Series progression when rep target is reached
+  useEffect(() => {
+    if (!exercise || phase !== "running" || repsDone < repetitions) return;
+    setPhase("paused");
+    setSeriesDone((prev) => {
+      const next = Math.min(prev + 1, targetSeries);
+      if (next < targetSeries) setTimeLeft(durationSeconds);
+      return next;
+    });
+  }, [repsDone, repetitions, exercise, phase, durationSeconds, targetSeries]);
 
   // Completion
   useEffect(() => {
@@ -145,7 +172,10 @@ export function ExercisePlayerScreen() {
 
     async function run() {
       try {
-        const landmarker = await getPoseLandmarker();
+        const [landmarker, handLandmarker] = await Promise.all([
+          getPoseLandmarker(),
+          getHandLandmarker(),
+        ]);
         if (cancelled) return;
 
         const loop = () => {
@@ -162,10 +192,23 @@ export function ExercisePlayerScreen() {
           const result = landmarker.detectForVideo(video, now);
           const landmarks = result?.landmarks?.[0] ?? null;
 
+          const handResult = handLandmarker.detectForVideo(video, now);
+          drawPoseLandmarks(canvasRef.current, landmarks, handResult?.landmarks ?? [], video);
+
+          const prevLatest = poseStateRef.current?.reversalTs?.[0] ?? 0;
+
           const evaluated =
             poseMode === "towel-slide"
               ? evaluateTowelSlidePose({ landmarks, prev: poseStateRef.current, timestampMs: now })
               : { ...evaluateArmInFramePose({ landmarks }), next: poseStateRef.current };
+
+          if (poseMode === "towel-slide") {
+            const newLatest = evaluated.next?.reversalTs?.[0] ?? 0;
+            if (newLatest !== prevLatest && newLatest > 0) {
+              totalReversalsRef.current += 1;
+              setRepsDone(Math.floor(totalReversalsRef.current / 2));
+            }
+          }
 
           poseStateRef.current = evaluated.next;
         };
@@ -181,6 +224,7 @@ export function ExercisePlayerScreen() {
     return () => {
       cancelled = true;
       if (poseRafRef.current) window.cancelAnimationFrame(poseRafRef.current);
+      clearPoseCanvas(canvasRef.current);
     };
   }, [camOn, poseMode]);
 
@@ -221,7 +265,10 @@ export function ExercisePlayerScreen() {
     <div className={styles.page}>
       <div className={styles.stage}>
         {camOn ? (
-          <video ref={videoRef} autoPlay playsInline muted className={styles.video} />
+          <>
+            <video ref={videoRef} autoPlay playsInline muted className={styles.video} />
+            <canvas ref={canvasRef} className={styles.poseCanvas} />
+          </>
         ) : (
           <div className={styles.placeholder}>
             {error ? (
@@ -243,13 +290,19 @@ export function ExercisePlayerScreen() {
       </div>
 
       <section className={styles.metrics} aria-label="Repetições, tempo e séries">
-        <p className={styles.instruction}>Posicione o celular e fale Iniciar</p>
+        {phase !== "running" && (
+          <p className={styles.instruction}>Posicione o celular e fale <strong>Iniciar</strong></p>
+        )}
         <div className={styles.metricsRow}>
           <div className={styles.metric}>
             <div className={[styles.metricCircle, styles.metricCircleSuccess].join(" ")}>
-              <span className={styles.metricValue}>{repetitions}</span>
+              <span className={styles.metricValue}>
+                {phase === "running" ? repsDone : repetitions}
+              </span>
             </div>
-            <span className={styles.metricLabel}>Repetições sugeridas</span>
+            <span className={styles.metricLabel}>
+              {phase === "running" ? "Repetições feitas" : "Repetições sugeridas"}
+            </span>
           </div>
 
           <div className={styles.metricCenter}>
@@ -260,10 +313,21 @@ export function ExercisePlayerScreen() {
               aria-label={mainButtonLabel}
               disabled={mainButtonDisabled}
             >
-              {phase === "running" ? <Pause size={22} /> : <Play size={22} />}
-              <span className={styles.metricCenterText}>{mainButtonLabel}</span>
+              {phase === "running" ? (
+                <>
+                  <Pause size={22} />
+                  <span className={styles.metricCenterText}>{formatSeconds(timeLeft)}</span>
+                </>
+              ) : (
+                <>
+                  <Play size={22} />
+                  <span className={styles.metricCenterText}>INICIAR</span>
+                </>
+              )}
             </button>
-            <span className={styles.metricTime}>{formatSeconds(timeLeft)}</span>
+            {phase !== "running" && (
+              <span className={styles.metricTime}>{formatSeconds(timeLeft)}</span>
+            )}
             <span className={styles.metricSub}>Tempo</span>
           </div>
 

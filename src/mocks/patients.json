@@ -64,7 +64,7 @@
             "durationSeconds": 180,
             "durationLabel": "2-3 min",
             "repetitions": 5,
-            "series": 1,
+            "series": 3,
             "frequency": "segunda a sexta"
           }
         ],
@@ -76,7 +76,7 @@
             "durationSeconds": 180,
             "durationLabel": "2-3 min",
             "repetitions": 5,
-            "series": 1,
+            "series": 3,
             "frequency": "segunda a sexta"
           }
         ],
@@ -88,7 +88,7 @@
             "durationSeconds": 180,
             "durationLabel": "2-3 min",
             "repetitions": 5,
-            "series": 1,
+            "series": 3,
             "frequency": "segunda a sexta"
           }
         ]
